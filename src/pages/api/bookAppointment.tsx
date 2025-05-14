@@ -1,5 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import AWS from 'aws-sdk';
+import nodemailer from 'nodemailer';
 import { v4 as uuidv4 } from 'uuid';
 
 // AWS Configuration
@@ -12,14 +13,16 @@ AWS.config.update({
 const dynamoDB = new AWS.DynamoDB.DocumentClient();
 const TABLE_NAME = "studio_appointments";
 
-// Remove Nodemailer setup since it's not being used anymore
-// const transporter = nodemailer.createTransport({
-//   service: 'gmail',
-//   auth: {
-//     user: process.env.EMAIL_USER, // Your Gmail address
-//     pass: process.env.EMAIL_PASSWORD, // Your Gmail app password
-//   },
-// });
+const transporter = nodemailer.createTransport({
+  host: 'smtp.zoho.in',
+  port: 465,
+  secure: true, // Use SSL
+  auth: {
+    user: process.env.EMAIL_USER, // Your Zoho email address
+    pass: process.env.EMAIL_PASS, // Your Zoho app password
+  },
+});
+
 
 type Appointment = {
   id: string;
@@ -69,7 +72,40 @@ export default async function handler(
       })
       .promise();
 
-    // Removed email sending logic here
+const mailOptions = {
+  from: process.env.EMAIL_USER,
+  to: email,
+  subject: 'Your Appointment is Confirmed!',
+  html: `
+    <div style="font-family: Arial, sans-serif; background-color: #f4f4f9; padding: 20px; border-radius: 8px; max-width: 600px; margin: auto;">
+      <div style="background-color: #ffffff; padding: 20px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+        <h2 style="color: #2c3e50; text-align: center;">Appointment Confirmation</h2>
+        <p style="font-size: 16px; color: #34495e;">Dear <strong>${name}</strong>,</p>
+        <p style="font-size: 16px; color: #34495e;">Thank you for booking with us. Your appointment is confirmed as follows:</p>
+        <table style="width: 100%; margin: 20px 0; border-collapse: collapse;">
+          <tr>
+            <td style="padding: 8px; border: 1px solid #ddd; background-color: #ecf0f1;">Date</td>
+            <td style="padding: 8px; border: 1px solid #ddd;">${date}</td>
+          </tr>
+          <tr>
+            <td style="padding: 8px; border: 1px solid #ddd; background-color: #ecf0f1;">Time Slot</td>
+            <td style="padding: 8px; border: 1px solid #ddd;">${timeSlot}</td>
+          </tr>
+          <tr>
+            <td style="padding: 8px; border: 1px solid #ddd; background-color: #ecf0f1;">Reason</td>
+            <td style="padding: 8px; border: 1px solid #ddd;">${reason}</td>
+          </tr>
+        </table>
+        <p style="font-size: 16px; color: #34495e;">We look forward to seeing you!</p>
+        <p style="font-size: 16px; color: #34495e;">Best regards,<br><strong>new MV HAIR STUDIO</strong></p>
+      </div>
+    </div>
+  `,
+};
+
+
+    // Send the email
+    await transporter.sendMail(mailOptions);
 
     // Respond with success
     res.status(200).json({ message: 'Success', appointment });

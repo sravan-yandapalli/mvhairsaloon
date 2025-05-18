@@ -25,7 +25,7 @@ const transporter = nodemailer.createTransport({
 });
 
 // ✅ Verify SMTP Connection on Cold Start (Logs only once)
-transporter.verify((error, success) => {
+transporter.verify((error) => {
   if (error) {
     console.error('SMTP Connection Error:', error);
   } else {

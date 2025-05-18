@@ -86,10 +86,7 @@ export default function GalleryUploader() {
         {gallery.map(({ id, url, type }) => (
           <div key={id} className="rounded overflow-hidden border border-gray-700">
             {type === "image" ? (
-              <>
-                <Image src={url} alt="uploaded" width={300} height={128} className="w-full h-32 object-cover" />
-                <img src={url} alt="uploaded" className="w-full h-32 object-cover" />
-              </>
+              <Image src={url} alt="uploaded" width={300} height={128} className="w-full h-32 object-cover" />
             ) : (
               <video controls className="w-full h-32 object-cover">
                 <source src={url} />

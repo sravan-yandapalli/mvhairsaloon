@@ -5,11 +5,12 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
 const backgroundImages = [
-  "/assets/services/replac.jpg",
-  "/assets/services/6.jpg",
-  "/assets/services/hero.png",
-  "/assets/services/her.png",
-]; // Add as many images as needed
+  "/assets/hero/10.jpg",
+  "/assets/hero/11.jpg",
+  "/assets/hero/12.jpg",
+  "/assets/hero/3.jpeg",
+  
+];
 
 const HeroSection = () => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -19,56 +20,59 @@ const HeroSection = () => {
       setCurrentImageIndex((prevIndex) =>
         (prevIndex + 1) % backgroundImages.length
       );
-    }, 5000); // Change image every 5 seconds
+    }, 4000);
 
     return () => clearInterval(interval);
   }, []);
 
   return (
-    <section
-      className="relative w-full min-h-screen bg-cover bg-center bg-no-repeat transition-all duration-1000 ease-in-out"
-      style={{
-        backgroundImage: `url(${backgroundImages[currentImageIndex]})`,
-      }}
-    >
-      {/* Overlay */}
-      <div className="absolute inset-0 bg-[#211f26] opacity-75"></div>
-
-      {/* Content */}
-      <div className="relative z-10 w-full h-full flex flex-col justify-center items-center px-4 sm:px-10 md:px-20 max-w-[1600px] mx-auto space-y-6 text-center">
-        
-        {/* NEW Icon */}
-        <div className="relative mt-40">
-          <div className="relative h-18 w-46 mx-auto">
-            <Image
-              src="/assets/navbar/lo.png"
-              alt="Icon"
-              layout="fill"
-              objectFit="contain"
-            />
-          </div>
+    <section className="w-full min-h-screen flex flex-col md:flex-row items-center justify-between bg-[#0C1B33] text-white px-6 sm:px-10 md:px-16 lg:px-24 py-10">
+      
+      {/* Left - Text Content */}
+      <div className="w-full md:w-1/2 space-y-6">
+        <div className="w-36 h-16 relative mb-4">
+          <Image
+            src="/assets/navbar/Asset 1.svg"
+            alt="Logo"
+            fill
+            className="object-contain"
+          />
         </div>
 
-        {/* Heading and Description */}
-        <div className="max-w-[528px] space-y-5">
-          <h1 className="text-white text-[36px] sm:text-[42px] md:text-[58px] select-none font-black italic playfair-4xl md:tracking-[8.7px] leading-tight">
-            HAIR <span className="text-[#eacb8b]">STUDIO</span>
-          </h1>
-          <p className="text-white text-[22px] sm:text-[28px] md:text-[38px] select-none font-medium italic leading-snug">
-            Expert in non-surgical
-            <br />
-            Hair Transplantation
-          </p>
+        <div className="w-86 h-16 relative mb-4">
+          <Image
+            src="/assets/navbar/Asset 3.svg"
+            alt="Logo"
+            fill
+            className="object-contain"
+          />
+        </div>
 
-          {/* Call to Action Button */}
-          <div className="mt-6">
-            <Link
-              href="#appointments"
-              className="inline-block bg-[#eacb5b] text-black text-xl md:text-2xl select-none font-medium px-8 py-3 rounded-full hover:bg-yellow-300 transition"
-            >
-              Book Appointments
-            </Link>
-          </div>
+        <h1 className="text-4xl sm:text-5xl font-bold leading-tight text-[#D4AF37]">
+          Non-Surgical Hair Restoration
+        </h1>
+
+        <p className="text-gray-200 text-lg sm:text-xl font-light">
+          Restore your confidence with pain-free, natural-looking hair replacement treatments led by professionals.
+        </p>
+
+        <Link
+          href="#appointments"
+          className="inline-block mt-4 bg-[#D4AF37] hover:bg-[#e1c563] text-black font-semibold text-lg px-8 py-3 rounded-full transition"
+        >
+          Book Free Consultation
+        </Link>
+      </div>
+
+      {/* Right - Image Gallery */}
+      <div className="w-full md:w-1/2 mt-10 md:mt-0 flex justify-center relative">
+        <div className="w-[620px] h-[420px] sm:w-[680px] sm:h-[480px] relative rounded-xl overflow-hidden shadow-xl border border-[#2a2a35]">
+          <Image
+            src={backgroundImages[currentImageIndex]}
+            alt="Hair Service"
+            fill
+            className="object-cover transition duration-1000 ease-in-out"
+          />
         </div>
       </div>
     </section>

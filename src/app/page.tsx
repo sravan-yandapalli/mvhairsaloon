@@ -1,10 +1,12 @@
 import BookAppointment from './appointment/page';
-import { Navbar } from './navbar'; 
+import  Navbar  from './nav/page'; 
 import Service from './service/page';
 import Footer from './fotter/page';
 import HeroSection from './hero/page';
 import WhyChooseUs from './why/page';
 import Image from 'next/image'; // Add this if not already present
+import BlogUploader from './blogs/page';
+import Feedback from './review/page';
 
 export default function Home() {
   return (
@@ -21,6 +23,14 @@ export default function Home() {
 
       <section id="service">
         <Service />
+      </section>
+
+      <section id="blogs">
+        <BlogUploader />
+      </section>
+
+      <section id="reviews">
+        <Feedback />
       </section>
 
       <section id="appointments">

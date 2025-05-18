@@ -6,7 +6,7 @@ const services = [
     title: "Hair Replacement",
     description:
       "Restore your natural look with our non-surgical hair replacement solutions.",
-    image: "/assets/services/bf.jpg",
+    image: "/assets/hero/1.jpeg"
   },
   {
     title: "Hair Extensions",
@@ -42,7 +42,7 @@ const services = [
     title: "Hair Transplantation",
     description:
       "Permanent hair restoration by expert transplantation professionals.",
-    image: "/assets/services/df.jpg",
+    image: "/assets/hero/3.jpeg",
   },
   {
     title: "Human Hair Eyelashes",
@@ -54,7 +54,7 @@ const services = [
 
 const Service = () => {
   return (
-    <div className="bg-[#121212] text-white py-16 px-4 sm:px-8">
+    <div className="bg-[#0C1B33] text-white py-16 px-4 sm:px-8">
       <div className="max-w-7xl mx-auto">
         <h2 className="text-3xl sm:text-4xl select-none font-bold mb-12 text-center">
           Our Services

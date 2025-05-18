@@ -12,12 +12,13 @@ const BookAppointment = () => {
     timeSlot: "",
     reason: "",
   });
-
   const [success, setSuccess] = useState(false);
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
   ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -31,10 +32,7 @@ const BookAppointment = () => {
   const validate = () => {
     const newErrors: { [key: string]: string } = {};
     if (!formData.name) newErrors.name = "Name is required";
-    if (
-      !formData.email ||
-      !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)
-    )
+    if (!formData.email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email))
       newErrors.email = "Valid email is required";
     if (!formData.phone || !/^\+91\d{10}$/.test(formData.phone))
       newErrors.phone = "Phone must be +91XXXXXXXXXX";
@@ -53,13 +51,11 @@ const BookAppointment = () => {
     e.preventDefault();
     if (!validate()) return;
 
-    // Combine date and timeSlot into appointmentDateTime
     const appointmentDateTime = `${formData.date} ${formData.timeSlot}`;
-
     try {
       const response = await axios.post("/api/bookAppointment", {
-        ...formData, 
-        appointmentDateTime, // Include appointmentDateTime in the request
+        ...formData,
+        appointmentDateTime,
       });
       if (response.status === 200) {
         setSuccess(true);
@@ -92,112 +88,124 @@ const BookAppointment = () => {
   ];
 
   return (
-    <div className="relative w-full min-h-screen bg-cover bg-center bg-[url('/assets/navbar/df.png')] flex items-center justify-center px-4 py-12">
-      <div className="absolute inset-0 bg-black opacity-60 z-0" />
-      <div className="relative z-10 bg-white max-w-md w-full rounded-xl p-8 shadow-xl">
-        <div className="text-center mb-6">
-          <div className="w-20 h-20 relative mx-auto mb-2">
-            <Image
-              src="/assets/navbar/rectangle.png"
-              alt="Logo"
-              layout="fill"
-              objectFit="contain"
-            />
+    <div
+      className="min-h-screen bg-cover bg-center  flex items-center justify-center py-16 px-4"
+      style={{ backgroundImage: "url('/assets/doddle.jpg')" }}
+    >
+      <div className="w-full max-w-4xl flex flex-col md:flex-row bg-[#0C1B33] bg-opacity-70 rounded-xl shadow-xl p-8 gap-10 text-white">
+        {/* Left - Form */}
+        <div className="flex-1">
+          <div className="text-center mb-6">
+            <div className="relative w-20 h-20 mx-auto mb-2">
+              <Image
+                src="/assets/navbar/Asset 1.svg"
+                alt="Logo"
+                fill
+                className="object-contain"
+              />
+            </div>
+            <div className="relative w-40 h-10 mx-auto mb-2">
+              <Image
+                src="/assets/navbar/Asset 3.svg"
+                alt="Title"
+                fill
+                className="object-contain"
+              />
+            </div>
           </div>
-          <h2 className="text-xl font-semibold text-gray-800">
-            New Mv Hair Studio
-          </h2>
+
+          {success && (
+            <div className="bg-green-600 text-white text-center py-2 rounded mb-4">
+              Appointment booked successfully!
+            </div>
+          )}
+
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <input
+              type="text"
+              name="name"
+              placeholder="Name"
+              value={formData.name}
+              onChange={handleChange}
+              className="w-full p-3 bg-transparent border border-[#B8974F] rounded placeholder-[#B8974F] text-white"
+            />
+            {errors.name && <p className="text-red-400 text-sm">{errors.name}</p>}
+
+            <input
+              type="email"
+              name="email"
+              placeholder="Email Address"
+              value={formData.email}
+              onChange={handleChange}
+              className="w-full p-3 bg-transparent border border-[#B8974F] rounded placeholder-[#B8974F] text-white"
+            />
+            {errors.email && <p className="text-red-400 text-sm">{errors.email}</p>}
+
+            <input
+              type="tel"
+              name="phone"
+              placeholder="Phone Number"
+              value={formData.phone}
+              onChange={handleChange}
+              className="w-full p-3 bg-transparent border border-[#B8974F] rounded placeholder-[#B8974F] text-white"
+            />
+            {errors.phone && <p className="text-red-400 text-sm">{errors.phone}</p>}
+
+            <input  
+              type="date"
+              name="date"
+              min={getTodayDate()}
+              value={formData.date}
+              onChange={handleChange}
+              className="w-full p-3 bg-transparent border border-[#B8974F] rounded text-white"
+            />
+            {errors.date && <p className="text-red-400 text-sm">{errors.date}</p>}
+
+            <select
+              name="timeSlot"
+              value={formData.timeSlot}
+              onChange={handleChange}
+              className="w-full p-3 bg-transparent border border-[#B8974F] rounded text-white"
+            >
+              <option value="">Select Time Slot</option>
+              {timeSlots.map((slot, idx) => (
+                <option key={idx} value={slot} className="text-black">
+                  {slot}
+                </option>
+              ))}
+            </select>
+            {errors.timeSlot && (
+              <p className="text-red-400 text-sm">{errors.timeSlot}</p>
+            )}
+
+            <textarea
+              name="reason"
+              placeholder="Reason for Visit"
+              value={formData.reason}
+              onChange={handleChange}
+              className="w-full p-3 bg-transparent border border-[#B8974F] rounded placeholder-[#B8974F] text-white"
+            />
+            {errors.reason && <p className="text-red-400 text-sm">{errors.reason}</p>}
+
+            <button
+              type="submit"
+              className="w-full p-3 bg-[#B8974F] text-white font-semibold rounded-full hover:bg-[#a5823f] transition"
+            >
+              Book Appointment
+            </button>
+          </form>
         </div>
 
-        {success && (
-          <div className="bg-green-100 text-green-700 text-sm text-center py-2 rounded mb-4 border border-green-400">
-            Appointment booked successfully!
-          </div>
-        )}
-
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <input
-            type="text"
-            name="name"
-            placeholder="Name"
-            value={formData.name}
-            onChange={handleChange}
-            className="w-full p-3 bg-[#B8974F] text-white placeholder-white rounded-md"
+        {/* Right - Image */}
+        <div className="hidden md:flex items-center justify-center">
+          <Image
+            src="/assets/hs.jpg"
+            alt="Studio"
+            width={450}
+            height={450}
+            className="rounded-lg shadow-lg object-cover"
           />
-          {errors.name && <p className="text-red-500 text-sm">{errors.name}</p>}
-
-          <input
-            type="email"
-            name="email"
-            placeholder="Email Address"
-            value={formData.email}
-            onChange={handleChange}
-            className="w-full p-3 bg-[#B8974F] text-white placeholder-white rounded-md"
-          />
-          {errors.email && (
-            <p className="text-red-500 text-sm">{errors.email}</p>
-          )}
-
-          <input
-            type="tel"
-            name="phone"
-            placeholder="Phone Number"
-            value={formData.phone}
-            onChange={handleChange}
-            className="w-full p-3 bg-[#B8974F] text-white placeholder-white rounded-md"
-          />
-          {errors.phone && (
-            <p className="text-red-500 text-sm">{errors.phone}</p>
-          )}
-
-          <input
-            type="date"
-            name="date"
-            min={getTodayDate()}
-            value={formData.date}
-            onChange={handleChange}
-            className="w-full p-3 bg-[#B8974F] text-white placeholder-white rounded-md"
-          />
-          {errors.date && (
-            <p className="text-red-500 text-sm">{errors.date}</p>
-          )}
-
-          <select
-            name="timeSlot"
-            value={formData.timeSlot}
-            onChange={handleChange}
-            className="w-full p-3 bg-[#B8974F] text-white placeholder-white rounded-md"
-          >
-            <option value="">Select Time Slot</option>
-            {timeSlots.map((slot, index) => (
-              <option key={index} value={slot}>
-                {slot}
-              </option>
-            ))}
-          </select>
-          {errors.timeSlot && (
-            <p className="text-red-500 text-sm">{errors.timeSlot}</p>
-          )}
-
-          <textarea
-            name="reason"
-            placeholder="Reason for Visit"
-            value={formData.reason}
-            onChange={handleChange}
-            className="w-full p-3 bg-[#B8974F] text-white placeholder-white rounded-md"
-            spellCheck={false}
-          />
-          {errors.reason && (
-            <p className="text-red-500 text-sm">{errors.reason}</p>
-          )}
-
-          <button
-            type="submit"
-            className="w-full p-3 bg-[#B8974F] text-white font-medium rounded-full hover:bg-[#a5823f] transition"
-          >
-            Book Appointment
-          </button>
-        </form>
+        </div>
       </div>
     </div>
   );

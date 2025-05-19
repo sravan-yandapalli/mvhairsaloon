@@ -38,7 +38,7 @@ const transporter = nodemailer.createTransport({
 });
 
 // ✅ Log transporter verification (cold start only)
-transporter.verify((error, success) => {
+transporter.verify((error) => {
   if (error) {
     console.error('❌ SMTP Connection Error:', error);
   } else {
@@ -123,7 +123,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     try {
       const info = await transporter.sendMail(mailOptions);
       console.log('✅ Email sent successfully:', info.messageId);
-    } catch (emailErr: any) {
+    } catch (emailErr: unknown) {
       console.error('❌ Email sending failed:', emailErr);
     }
 

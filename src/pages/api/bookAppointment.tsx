@@ -29,7 +29,7 @@ const TABLE_NAME = 'studio_appointments';
 // ✅ Nodemailer Setup
 const transporter = nodemailer.createTransport({
   host: 'smtp.zoho.in',
-  port: 465,
+  port: 587,
   secure: true,
   auth: {
     user: process.env.EMAIL_USER,

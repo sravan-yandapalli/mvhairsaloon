@@ -3,9 +3,9 @@ import AWS from 'aws-sdk';
 import nodemailer from 'nodemailer';
 import { v4 as uuidv4 } from 'uuid';
 
-// ✅ Check ENV availability
+// ✅ ENV Check
 if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
-  console.error('❌ Missing EMAIL credentials');
+  console.error('❌ EMAIL_USER or EMAIL_PASS is not defined in environment variables.');
 }
 
 if (
@@ -13,7 +13,7 @@ if (
   !process.env.NEXT_PUBLIC_AWS_SECRET_ACCESS_KEY ||
   !process.env.NEXT_PUBLIC_AWS_REGION
 ) {
-  console.error('❌ Missing AWS credentials');
+  console.error('❌ AWS credentials or region are missing.');
 }
 
 // ✅ AWS Configuration
@@ -26,24 +26,23 @@ AWS.config.update({
 const dynamoDB = new AWS.DynamoDB.DocumentClient();
 const TABLE_NAME = 'studio_appointments';
 
-// ✅ Nodemailer setup with port 587 (TLS)
+// ✅ Nodemailer Setup
 const transporter = nodemailer.createTransport({
   host: 'smtp.zoho.in',
-  port: 587,
-  secure: false, // use TLS
-  requireTLS: true,
+  port: 465,
+  secure: true,
   auth: {
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS,
   },
 });
 
-// ✅ Verify SMTP connection
-transporter.verify((error, success) => {
+// ✅ Verify SMTP
+transporter.verify((error) => {
   if (error) {
     console.error('❌ SMTP Connection Error:', error);
   } else {
-    console.log('✅ SMTP is ready to send emails');
+    console.log('✅ SMTP is ready to send messages.');
   }
 });
 
@@ -83,13 +82,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   };
 
   try {
-    // ✅ Store in DynamoDB
+    // ✅ Save to DynamoDB
     await dynamoDB.put({
       TableName: TABLE_NAME,
       Item: appointment,
     }).promise();
 
-    // ✅ Email content
+    // ✅ Email Content
     const mailOptions = {
       from: `"MV Hair Studio" <${process.env.EMAIL_USER}>`,
       to: email,
@@ -122,15 +121,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     };
 
     try {
-      const info = await transporter.sendMail(mailOptions);
-      console.log('✅ Email sent successfully:', info.messageId);
-    } catch (emailErr) {
+      await transporter.sendMail(mailOptions);
+      console.log('✅ Email sent successfully.');
+    } catch (emailErr: unknown) {
       console.error('❌ Email sending failed:', emailErr);
     }
 
-    res.status(200).json({ message: 'Appointment booked successfully', appointment });
+    res.status(200).json({ message: 'Success', appointment });
   } catch (dbError) {
     console.error('❌ DynamoDB Error:', dbError);
-    res.status(500).json({ message: 'Error booking appointment. Please try again.' });
+    res.status(500).json({ message: 'Something went wrong with booking.' });
   }
 }

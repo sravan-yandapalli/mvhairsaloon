@@ -26,16 +26,19 @@ AWS.config.update({
 const dynamoDB = new AWS.DynamoDB.DocumentClient();
 const TABLE_NAME = 'studio_appointments';
 
-// ✅ Nodemailer Setup
 const transporter = nodemailer.createTransport({
   host: 'smtp.zoho.in',
   port: 587,
-  secure: true,
+  secure: false, // ← change this to false
   auth: {
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS,
   },
+  tls: {
+    rejectUnauthorized: false, // Optional, helps in local dev
+  },
 });
+
 
 // ✅ Verify SMTP
 transporter.verify((error) => {

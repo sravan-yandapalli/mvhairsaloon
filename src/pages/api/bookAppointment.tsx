@@ -3,17 +3,19 @@ import AWS from 'aws-sdk';
 import nodemailer from 'nodemailer';
 import { v4 as uuidv4 } from 'uuid';
 
-// ✅ ENV Check
-if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
-  console.error('❌ EMAIL_USER or EMAIL_PASS is not defined in environment variables.');
-}
+// ✅ Check required environment variables
+const requiredEnvVars = [
+  'EMAIL_USER',
+  'EMAIL_PASS',
+  'NEXT_PUBLIC_AWS_ACCESS_KEY_ID',
+  'NEXT_PUBLIC_AWS_SECRET_ACCESS_KEY',
+  'NEXT_PUBLIC_AWS_REGION',
+];
 
-if (
-  !process.env.NEXT_PUBLIC_AWS_ACCESS_KEY_ID ||
-  !process.env.NEXT_PUBLIC_AWS_SECRET_ACCESS_KEY ||
-  !process.env.NEXT_PUBLIC_AWS_REGION
-) {
-  console.error('❌ AWS credentials or region are missing.');
+for (const key of requiredEnvVars) {
+  if (!process.env[key]) {
+    console.error(`❌ Missing env variable: ${key}`);
+  }
 }
 
 // ✅ AWS Configuration
@@ -26,29 +28,27 @@ AWS.config.update({
 const dynamoDB = new AWS.DynamoDB.DocumentClient();
 const TABLE_NAME = 'studio_appointments';
 
+// ✅ Setup Nodemailer with Zoho
 const transporter = nodemailer.createTransport({
   host: 'smtp.zoho.in',
-  port: 587,
-  secure: false, // ← change this to false
+  port: 465,
+  secure: true, // Use SSL
   auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS,
-  },
-  tls: {
-    rejectUnauthorized: false, // Optional, helps in local dev
+    user: process.env.EMAIL_USER!,
+    pass: process.env.EMAIL_PASS!,
   },
 });
 
-
-// ✅ Verify SMTP
+// ✅ Verify SMTP connection
 transporter.verify((error) => {
   if (error) {
-    console.error('❌ SMTP Connection Error:', error);
+    console.error('❌ SMTP verification failed:', error);
   } else {
-    console.log('✅ SMTP is ready to send messages.');
+    console.log('✅ SMTP connected successfully.');
   }
 });
 
+// ✅ Appointment type
 type Appointment = {
   id: string;
   name: string;
@@ -85,13 +85,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   };
 
   try {
-    // ✅ Save to DynamoDB
+    // ✅ Store in DynamoDB
     await dynamoDB.put({
       TableName: TABLE_NAME,
       Item: appointment,
     }).promise();
 
-    // ✅ Email Content
+    // ✅ Email content
     const mailOptions = {
       from: `"MV Hair Studio" <${process.env.EMAIL_USER}>`,
       to: email,
@@ -123,16 +123,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       `,
     };
 
-    try {
-      await transporter.sendMail(mailOptions);
-      console.log('✅ Email sent successfully.');
-    } catch (emailErr: unknown) {
-      console.error('❌ Email sending failed:', emailErr);
-    }
+    // ✅ Send confirmation email
+    await transporter.sendMail(mailOptions);
 
     res.status(200).json({ message: 'Success', appointment });
-  } catch (dbError) {
-    console.error('❌ DynamoDB Error:', dbError);
-    res.status(500).json({ message: 'Something went wrong with booking.' });
+  } catch (error) {
+    console.error('❌ Error during booking process:', error);
+    res.status(500).json({ message: 'Internal Server Error' });
   }
 }

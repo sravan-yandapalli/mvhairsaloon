@@ -63,6 +63,12 @@ const Navbar: React.FC = () => {
                             >
                                 Book Appointments
                             </Link>
+                            <Link
+                                href="#home-services"
+                                className="bg-[#24A0ED] text-white px-4 py-2 rounded-lg text-lg font-bold hover:bg-blue-300 transition"
+                            >
+                                Home Services
+                            </Link>
                         </div>
 
                         {/* Mobile Menu Button */}
@@ -98,6 +104,12 @@ const Navbar: React.FC = () => {
                         >
                             Book Appointments
                         </Link>
+                        <Link
+                                href="#home-services"
+                                className="bg-[#24A0ED] text-white px-34 py-2 rounded-lg text-lg font-bold hover:bg-blue-300 transition"
+                            >
+                                Home Services
+                            </Link>
                     </div>
                 )}
             </header>

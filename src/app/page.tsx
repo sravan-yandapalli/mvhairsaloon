@@ -7,6 +7,7 @@ import WhyChooseUs from './why/page';
 import Image from 'next/image'; // Add this if not already present
 import BlogUploader from './blogs/page';
 import Feedback from './review/page';
+import HomeServices from './hservice/page';
 
 export default function Home() {
   return (
@@ -19,6 +20,10 @@ export default function Home() {
 
       <section id="why">
         <WhyChooseUs />
+      </section>
+
+      <section id="home-services">
+        <HomeServices />
       </section>
 
       <section id="service">

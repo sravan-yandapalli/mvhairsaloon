@@ -9,7 +9,7 @@ const WhyChooseUs = () => {
         {/* Left Side: Video */}
         <div className="w-full md:w-1/2 space-y-6">
           <h2 className="text-[32px] md:text-[42px] select-none font-bold italic text-[#FFA501] tracking-wide">
-            Why MV Hair Studio is Best of Others
+            Why new MV Hair Studio is Best of Others
           </h2>
 
           <ul className="space-y-4 text-lg md:text-xl text-[#000000] select-none font-medium leading-relaxed">

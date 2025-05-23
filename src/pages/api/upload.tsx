@@ -1,92 +1,87 @@
-import type { NextApiRequest, NextApiResponse } from "next";
-import {
-  S3Client,
-  PutObjectCommand,
-  PutObjectCommandInput,
-} from "@aws-sdk/client-s3";
-import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
-import {
-  DynamoDBDocumentClient,
-  PutCommand,
-} from "@aws-sdk/lib-dynamodb";
-import { v4 as uuidv4 } from "uuid";
+import type { NextApiRequest, NextApiResponse } from 'next';
+import { IncomingForm, Files, File } from 'formidable';
+import fs from 'fs';
+import path from 'path';
+import { S3Client, PutObjectCommand, DeleteObjectCommand } from '@aws-sdk/client-s3';
+
+export const config = {
+  api: {
+    bodyParser: false,
+  },
+};
 
 const s3 = new S3Client({
-  region: process.env.AWS_REGION,
+  region: process.env.NEXT_PUBLIC_AWS_REGION!,
   credentials: {
-    accessKeyId: process.env.AWS_ACCESS_KEY_ID!,
-    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY!,
+    accessKeyId: process.env.NEXT_PUBLIC_AWS_ACCESS_KEY_ID!,
+    secretAccessKey: process.env.NEXT_PUBLIC_AWS_SECRET_ACCESS_KEY!,
   },
 });
 
-const dynamoClient = new DynamoDBClient({
-  region: process.env.AWS_REGION,
-});
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+  const authHeader = req.headers.authorization;
+  if (authHeader !== `Bearer ${process.env.ADMIN_SECRET}`) {
+    return res.status(403).json({ error: 'Unauthorized' });
+  }
 
-const ddbDocClient = DynamoDBDocumentClient.from(dynamoClient);
+  if (req.method === 'POST') {
+    const form = new IncomingForm({ multiples: true });
 
-const BUCKET_NAME = process.env.S3_BUCKET_NAME!;
-const TABLE_NAME = process.env.DYNAMODB_TABLE_NAME!;
-
-type UploadRequestBody = {
-  title: string;
-  description: string;
-  fileName: string;
-  fileType: string; // mime type
-};
-
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
-  if (req.method === "POST") {
     try {
-      const { title, description, fileName, fileType } = req.body as UploadRequestBody;
+      const data = await new Promise<{ files: Files }>((resolve, reject) => {
+        form.parse(req, (err, fields, files) => {
+          if (err) reject(err);
+          else resolve({ files });
+        });
+      });
 
-      if (!title || !fileName || !fileType) {
-        return res.status(400).json({ error: "Missing required fields" });
-      }
+      const uploadedFiles = Array.isArray(data.files.files)
+        ? data.files.files
+        : [data.files.files];
 
-      // Generate unique file key for S3
-      const fileKey = `blogs/${uuidv4()}-${fileName}`;
+      const validFiles = uploadedFiles.filter((file): file is File => !!file);
 
-      // Generate presigned URL for upload
-      const params: PutObjectCommandInput = {
-        Bucket: BUCKET_NAME,
-        Key: fileKey,
-        ContentType: fileType,
-        ACL: "public-read",
-      };
+      const urls = await Promise.all(
+        validFiles.map(async (file) => {
+          const fileContent = fs.readFileSync(file.filepath);
+          const extension = path.extname(file.originalFilename || '');
+          const key = `uploads/${Date.now()}-${Math.random().toString(36).substring(2)}${extension}`;
 
-      // Using getSignedUrl from @aws-sdk/s3-request-presigner
-      const { getSignedUrl } = await import("@aws-sdk/s3-request-presigner");
-      const command = new PutObjectCommand(params);
-      const uploadUrl = await getSignedUrl(s3, command, { expiresIn: 3600 }); // 1 hour expiry
+          await s3.send(new PutObjectCommand({
+            Bucket: process.env.NEXT_PUBLIC_AWS_S3_BUCKET_NAME!,
+            Key: key,
+            Body: fileContent,
+            ContentType: file.mimetype || undefined,
+          }));
 
-      // URL for accessing file after upload
-      const fileUrl = `https://${BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${fileKey}`;
+          fs.unlinkSync(file.filepath);
 
-      // Save metadata to DynamoDB (including fileUrl)
-      await ddbDocClient.send(
-        new PutCommand({
-          TableName: TABLE_NAME,
-          Item: {
-            id: uuidv4(),
-            title,
-            description,
-            fileUrl,
-            createdAt: new Date().toISOString(),
-          },
+          return `https://${process.env.NEXT_PUBLIC_AWS_S3_BUCKET_NAME}.s3.${process.env.NEXT_PUBLIC_AWS_REGION}.amazonaws.com/${key}`;
         })
       );
 
-      res.status(200).json({ uploadUrl, fileUrl });
+      return res.status(200).json({ urls });
     } catch (error) {
-      console.error("Upload error", error);
-      res.status(500).json({ error: "Internal Server Error" });
+      console.error('Upload error:', error);
+      return res.status(500).json({ error: 'Upload failed' });
     }
-  } else {
-    res.setHeader("Allow", ["POST"]);
-    res.status(405).end(`Method ${req.method} Not Allowed`);
   }
+
+  if (req.method === 'DELETE') {
+    const key = req.query.key as string;
+    if (!key) return res.status(400).json({ error: 'Missing key' });
+
+    try {
+      await s3.send(new DeleteObjectCommand({
+        Bucket: process.env.NEXT_PUBLIC_AWS_S3_BUCKET_NAME!,
+        Key: key,
+      }));
+      return res.status(200).json({ message: 'Deleted successfully' });
+    } catch (error) {
+      console.error('Delete error:', error);
+      return res.status(500).json({ error: 'Delete failed' });
+    }
+  }
+
+  return res.status(405).json({ error: 'Method not allowed' });
 }

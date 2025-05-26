@@ -37,19 +37,19 @@ const Footer = () => {
           <ul className="space-y-2">
             <li className="flex items-center">
               <FaFacebookF className="mr-3" />
-              <a href="https://www.facebook.com/yourpage" target="_blank" rel="noopener noreferrer" className="hover:underline">Facebook</a>
+              <a href="https://www.facebook.com/profile.php?id=61576604253552" target="_blank" rel="noopener noreferrer" className="hover:underline">Facebook</a>
             </li>
             <li className="flex items-center">
               <FaInstagram className="mr-3" />
-              <a href="https://www.instagram.com/yourprofile" target="_blank" rel="noopener noreferrer" className="hover:underline">Instagram</a>
+              <a href="https://www.instagram.com/newmv.hairstudio?igsh=dmthMG1tNnp6enBx&utm_source=qr" target="_blank" rel="noopener noreferrer" className="hover:underline">Instagram</a>
             </li>
             <li className="flex items-center">
               <FaLinkedinIn className="mr-3" />
-              <a href="https://www.linkedin.com/in/yourprofile" target="_blank" rel="noopener noreferrer" className="hover:underline">LinkedIn</a>
+              <a href="http://linkedin.com/in/new-mv-hair-studio-388578367" target="_blank" rel="noopener noreferrer" className="hover:underline">LinkedIn</a>
             </li>
             <li className="flex items-center">
               <FaYoutube className="mr-3" />
-              <a href="https://www.youtube.com/channel/yourchannel" target="_blank" rel="noopener noreferrer" className="hover:underline">YouTube</a>
+              <a href="https://www.youtube.com/channel/UCz20m3XryBZN0gBaH0a1KLw" target="_blank" rel="noopener noreferrer" className="hover:underline">YouTube</a>
             </li>
             <li className="flex items-center">
               <FaWhatsapp className="mr-3" />

@@ -11,6 +11,7 @@ import Image from 'next/image';
 import BlogUploader from './blogs/page';
 import Feedback from './review/page';
 import HomeServices from './hservice/page';
+import ScrollingLabels from './scroll/page';
 
 export default function Home() {
   const [loading, setLoading] = useState(true);
@@ -42,6 +43,8 @@ export default function Home() {
       <section id="hero">
         <HeroSection />
       </section>
+
+      <ScrollingLabels/>
 
       <section id="why">
         <WhyChooseUs />

@@ -6,13 +6,13 @@ const services = [
     title: "Hair Replacement",
     description:
       "Restore your natural look with our non-surgical hair replacement solutions.",
-    image: "/assets/hero/1.jpeg"
+    image: "/assets/services/hs.jpg",
   },
   {
     title: "Hair Extensions",
     description:
       "Premium hair extensions to instantly add length and volume to your hair.",
-    image: "/assets/services/ext.jpg",
+    image: "/assets/services/ext.jpeg",
   },
   {
     title: "Hair Build Fibers",
@@ -30,19 +30,19 @@ const services = [
     title: "Hair Wigs",
     description:
       "Variety of high-quality wigs in different colors and styles to suit your look.",
-    image: "/assets/services/download.png",
+    image: "/assets/services/wig.jpeg",
   },
   {
     title: "Chemotherapy/Alopecia Wigs",
     description:
       "Comfortable and natural-looking wigs designed for those undergoing hair loss.",
-    image: "/assets/services/ext1.jpg",
+    image: "/assets/services/cwige.jpeg",
   },
   {
     title: "Hair Transplantation",
     description:
       "Permanent hair restoration by expert transplantation professionals.",
-    image: "/assets/hero/3.jpeg",
+    image: "/assets/services/trans.jpeg",
   },
   {
     title: "Human Hair Eyelashes",
@@ -66,7 +66,7 @@ const Service = () => {
               key={index}
               className="bg-[#1e1e1e] rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-shadow duration-300"
             >
-              <div className="relative w-full h-52 sm:h-60">
+              <div className="relative w-full h-100 sm:h-80">
                 <Image
                   src={service.image}
                   alt={service.title}

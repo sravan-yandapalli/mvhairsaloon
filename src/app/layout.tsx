@@ -19,6 +19,9 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: "MV Hair Studio",
   description: "Expert in Non-Surgical Hair Transplantation – Look Your Best with Confidence.",
+  icons: {
+    icon: "/assets/favicon.png", // or "/favicon.png" if that's what you're using
+  },
 };
 
 // Root layout

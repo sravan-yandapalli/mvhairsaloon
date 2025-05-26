@@ -16,9 +16,7 @@ const BookAppointment = () => {
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
   const handleChange = (
-    e: React.ChangeEvent<
-      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-    >
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -36,11 +34,9 @@ const BookAppointment = () => {
       newErrors.email = "A valid email is required";
     if (!formData.phone || !/^\+91\d{10}$/.test(formData.phone))
       newErrors.phone = "Phone must be +91XXXXXXXXXX";
-    if (!formData.date) {
-      newErrors.date = "Date is required";
-    } else if (formData.date < getTodayDate()) {
+    if (!formData.date) newErrors.date = "Date is required";
+    else if (formData.date < getTodayDate())
       newErrors.date = "Date cannot be in the past";
-    }
     if (!formData.timeSlot) newErrors.timeSlot = "Time slot is required";
     if (!formData.reason) newErrors.reason = "Reason is required";
     setErrors(newErrors);
@@ -97,20 +93,10 @@ const BookAppointment = () => {
         <div className="flex-1">
           <div className="text-center mb-6">
             <div className="relative w-20 h-20 mx-auto mb-2">
-              <Image
-                src="/assets/navbar/Asset 1.svg"
-                alt="Logo"
-                fill
-                className="object-contain"
-              />
+              <Image src="/assets/navbar/Asset 1.svg" alt="Logo" fill className="object-contain" />
             </div>
             <div className="relative w-40 h-10 mx-auto mb-2">
-              <Image
-                src="/assets/navbar/Asset 3.svg"
-                alt="Title"
-                fill
-                className="object-contain"
-              />
+              <Image src="/assets/navbar/Asset 3.svg" alt="Title" fill className="object-contain" />
             </div>
           </div>
 
@@ -121,56 +107,19 @@ const BookAppointment = () => {
           )}
 
           <form onSubmit={handleSubmit} className="space-y-4">
-            <input
-              type="text"
-              name="name"
-              placeholder="Name"
-              value={formData.name}
-              onChange={handleChange}
-              spellCheck={false}
-              className="w-full p-3 bg-transparent border border-[#B8974F] rounded placeholder-[#B8974F] text-white"
-            />
+            <input type="text" name="name" placeholder="Name" value={formData.name} onChange={handleChange} className="w-full p-3 bg-transparent border border-[#B8974F] rounded placeholder-[#B8974F] text-white" />
             {errors.name && <p className="text-red-400 text-sm">{errors.name}</p>}
 
-            <input
-              type="email"
-              name="email"
-              placeholder="Email Address"
-              value={formData.email}
-              onChange={handleChange}
-              spellCheck={false}
-              className="w-full p-3 bg-transparent border border-[#B8974F] rounded placeholder-[#B8974F] text-white"
-            />
+            <input type="email" name="email" placeholder="Email Address" value={formData.email} onChange={handleChange} className="w-full p-3 bg-transparent border border-[#B8974F] rounded placeholder-[#B8974F] text-white" />
             {errors.email && <p className="text-red-400 text-sm">{errors.email}</p>}
 
-            <input
-              type="tel"
-              name="phone"
-              placeholder="Phone Number (+91XXXXXXXXXX)"
-              value={formData.phone}
-              onChange={handleChange}
-              spellCheck={false}
-              className="w-full p-3 bg-transparent border border-[#B8974F] rounded placeholder-[#B8974F] text-white"
-            />
+            <input type="tel" name="phone" placeholder="Phone Number (+91XXXXXXXXXX)" value={formData.phone} onChange={handleChange} className="w-full p-3 bg-transparent border border-[#B8974F] rounded placeholder-[#B8974F] text-white" />
             {errors.phone && <p className="text-red-400 text-sm">{errors.phone}</p>}
 
-            <input
-              type="date"
-              name="date"
-              min={getTodayDate()}
-              value={formData.date}
-              onChange={handleChange}
-              spellCheck={false}
-              className="w-full p-3 bg-transparent border border-[#B8974F] rounded text-white"
-            />
+            <input type="date" name="date" min={getTodayDate()} value={formData.date} onChange={handleChange} className="w-full p-3 bg-transparent border border-[#B8974F] rounded text-white" />
             {errors.date && <p className="text-red-400 text-sm">{errors.date}</p>}
 
-            <select
-              name="timeSlot"
-              value={formData.timeSlot}
-              onChange={handleChange}
-              className="w-full p-3 bg-transparent border border-[#B8974F] rounded text-white"
-            >
+            <select name="timeSlot" value={formData.timeSlot} onChange={handleChange} className="w-full p-3 bg-transparent border border-[#B8974F] rounded text-white">
               <option value="">Select Time Slot</option>
               {timeSlots.map((slot, idx) => (
                 <option key={idx} value={slot} className="text-black">
@@ -178,24 +127,12 @@ const BookAppointment = () => {
                 </option>
               ))}
             </select>
-            {errors.timeSlot && (
-              <p className="text-red-400 text-sm">{errors.timeSlot}</p>
-            )}
+            {errors.timeSlot && <p className="text-red-400 text-sm">{errors.timeSlot}</p>}
 
-            <textarea
-              name="reason"
-              placeholder="Reason for Visit"
-              value={formData.reason}
-              onChange={handleChange}
-              spellCheck={false}
-              className="w-full p-3 bg-transparent border border-[#B8974F] rounded placeholder-[#B8974F] text-white"
-            />
+            <textarea name="reason" placeholder="Reason for Visit" value={formData.reason} onChange={handleChange} className="w-full p-3 bg-transparent border border-[#B8974F] rounded placeholder-[#B8974F] text-white" />
             {errors.reason && <p className="text-red-400 text-sm">{errors.reason}</p>}
 
-            <button
-              type="submit"
-              className="w-full p-3 bg-[#B8974F] text-white font-semibold rounded-full hover:bg-[#a5823f] transition"
-            >
+            <button type="submit" className="w-full p-3 bg-[#B8974F] text-white font-semibold rounded-full hover:bg-[#a5823f] transition">
               Book Appointment
             </button>
           </form>
@@ -203,13 +140,7 @@ const BookAppointment = () => {
 
         {/* Right - Image */}
         <div className="hidden md:flex items-center justify-center">
-          <Image
-            src="/assets/hs.jpg"
-            alt="Studio"
-            width={450}
-            height={450}
-            className="rounded-lg shadow-lg object-cover"
-          />
+          <Image src="/assets/hs.jpg" alt="Studio" width={450} height={450} className="rounded-lg shadow-lg object-cover" />
         </div>
       </div>
     </div>

@@ -1,19 +1,44 @@
+'use client';
+import { useEffect, useState } from 'react';
+
 import BookAppointment from './appointment/page';
-import  Navbar  from './nav/page'; 
+import Navbar from './nav/page'; 
 import Service from './service/page';
 import Footer from './fotter/page';
 import HeroSection from './hero/page';
 import WhyChooseUs from './why/page';
-import Image from 'next/image'; // Add this if not already present
+import Image from 'next/image';
 import BlogUploader from './blogs/page';
 import Feedback from './review/page';
 import HomeServices from './hservice/page';
 
 export default function Home() {
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // Simulate loading duration (e.g., 2 seconds)
+    const timer = setTimeout(() => setLoading(false), 2000);
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-screen bg-black">
+        <Image
+          src="/assets/studio-loader.gif" // your loading logo or animation
+          alt="Loading"
+          width={150}
+          height={150}
+          className="animate-pulse"
+        />
+      </div>
+    );
+  }
+
   return (
     <>
       <Navbar />
-      
+
       <section id="hero">
         <HeroSection />
       </section>

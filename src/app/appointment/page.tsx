@@ -33,7 +33,7 @@ const BookAppointment = () => {
     const newErrors: { [key: string]: string } = {};
     if (!formData.name) newErrors.name = "Name is required";
     if (!formData.email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email))
-      newErrors.email = "Valid email is required";
+      newErrors.email = "A valid email is required";
     if (!formData.phone || !/^\+91\d{10}$/.test(formData.phone))
       newErrors.phone = "Phone must be +91XXXXXXXXXX";
     if (!formData.date) {
@@ -89,7 +89,7 @@ const BookAppointment = () => {
 
   return (
     <div
-      className="min-h-screen bg-cover bg-center  flex items-center justify-center py-16 px-4"
+      className="min-h-screen bg-cover bg-center flex items-center justify-center py-16 px-4"
       style={{ backgroundImage: "url('/assets/doddle.jpg')" }}
     >
       <div className="w-full max-w-4xl flex flex-col md:flex-row bg-[#0C1B33] bg-opacity-70 rounded-xl shadow-xl p-8 gap-10 text-white">
@@ -127,6 +127,7 @@ const BookAppointment = () => {
               placeholder="Name"
               value={formData.name}
               onChange={handleChange}
+              spellCheck={false}
               className="w-full p-3 bg-transparent border border-[#B8974F] rounded placeholder-[#B8974F] text-white"
             />
             {errors.name && <p className="text-red-400 text-sm">{errors.name}</p>}
@@ -137,6 +138,7 @@ const BookAppointment = () => {
               placeholder="Email Address"
               value={formData.email}
               onChange={handleChange}
+              spellCheck={false}
               className="w-full p-3 bg-transparent border border-[#B8974F] rounded placeholder-[#B8974F] text-white"
             />
             {errors.email && <p className="text-red-400 text-sm">{errors.email}</p>}
@@ -144,19 +146,21 @@ const BookAppointment = () => {
             <input
               type="tel"
               name="phone"
-              placeholder="Phone Number"
+              placeholder="Phone Number (+91XXXXXXXXXX)"
               value={formData.phone}
               onChange={handleChange}
+              spellCheck={false}
               className="w-full p-3 bg-transparent border border-[#B8974F] rounded placeholder-[#B8974F] text-white"
             />
             {errors.phone && <p className="text-red-400 text-sm">{errors.phone}</p>}
 
-            <input  
+            <input
               type="date"
               name="date"
               min={getTodayDate()}
               value={formData.date}
               onChange={handleChange}
+              spellCheck={false}
               className="w-full p-3 bg-transparent border border-[#B8974F] rounded text-white"
             />
             {errors.date && <p className="text-red-400 text-sm">{errors.date}</p>}
@@ -183,6 +187,7 @@ const BookAppointment = () => {
               placeholder="Reason for Visit"
               value={formData.reason}
               onChange={handleChange}
+              spellCheck={false}
               className="w-full p-3 bg-transparent border border-[#B8974F] rounded placeholder-[#B8974F] text-white"
             />
             {errors.reason && <p className="text-red-400 text-sm">{errors.reason}</p>}

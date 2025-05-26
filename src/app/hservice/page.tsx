@@ -8,10 +8,10 @@ export default function HomeServices() {
         {/* Header */}
         <header className="text-center max-w-3xl mx-auto mb-16">
           <h1 className="text-5xl font-extrabold mb-4 drop-shadow-md">
-            Expert Non-Surgical Hair Transplantation Services — Delivered Comfortably At Your Home.
+            New MV Hair Studio 
           </h1>
           <p className="text-xl font-semibold max-w-xl mx-auto drop-shadow-sm">
-             New MV Hair Studio
+             Expert Non-Surgical Hair Transplantation Services — Delivered Comfortably At Your Home.
           </p>
         </header>
 
@@ -57,7 +57,7 @@ export default function HomeServices() {
           </p>
           <a
             href="tel:+917075367929"
-            className="inline-block bg-yellow-400 text-[#004f73] font-bold text-xl px-12 py-4 rounded-full shadow-lg hover:bg-yellow-500 transition-colors duration-300"
+            className="inline-block bg-yellow-400 text-[#004f73] font-bold text-l px-10 py-3 rounded-full shadow-lg hover:bg-yellow-500 transition-colors duration-300"
           >
             Call Now: +91 954 265 8504
           </a>

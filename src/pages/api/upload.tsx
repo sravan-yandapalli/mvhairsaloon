@@ -20,7 +20,7 @@ const s3 = new S3Client({
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   const authHeader = req.headers.authorization;
-  if (authHeader !== `Bearer ${process.env.ADMIN_SECRET}`) {
+  if (authHeader !== `Bearer ${process.env.NEXT_PUBLIC_ADMIN_SECRET}`) {
     return res.status(403).json({ error: 'Unauthorized' });
   }
 

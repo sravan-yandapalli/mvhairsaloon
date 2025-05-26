@@ -98,14 +98,14 @@ export default function Feedback() {
       >
         <h3 className="text-2xl font-semibold text-gray-900">Leave a Feedback</h3>
 
-        {formError && <p className="text-red-600 font-medium">{formError}</p>}
-
         <input
           type="text"
           placeholder="Your Name"
           className="w-full border border-gray-300 rounded-md p-3 text-lg text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#004f73]"
           value={name}
           onChange={(e) => setName(e.target.value)}
+          spellCheck={false}
+          data-ms-editor="true"
         />
 
         <textarea
@@ -114,6 +114,8 @@ export default function Feedback() {
           rows={4}
           value={comment}
           onChange={(e) => setComment(e.target.value)}
+          spellCheck={false}
+          data-ms-editor="true"
         />
 
         <div className="flex items-center space-x-3">

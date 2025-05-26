@@ -139,6 +139,9 @@ export default function Feedback() {
         >
           {submitting ? "Submitting..." : "Submit"}
         </button>
+        {formError && (
+          <p className="text-red-600 font-semibold mt-2">{formError}</p>
+        )}
       </form>
 
       {/* Feedback Summary */}

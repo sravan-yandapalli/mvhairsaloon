@@ -1,50 +1,73 @@
 import React from "react";
-import { FaFacebookF, FaTwitter, FaGooglePlusG, FaLinkedinIn, FaYoutube, FaPhoneAlt, FaEnvelope, FaMapMarkerAlt } from "react-icons/fa";
+import {
+  FaFacebookF,
+  FaLinkedinIn,
+  FaYoutube,
+  FaInstagram,
+  FaWhatsapp,
+  FaPhoneAlt,
+  FaEnvelope,
+  FaMapMarkerAlt,
+} from "react-icons/fa";
 
 const Footer = () => {
   return (
     <footer className="bg-[#121212] text-gray-300 px-4 sm:px-8 py-12">
       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
 
-        {/* SALON ADDRESS */}
+        {/* STUDIO ADDRESS */}
         <div>
           <h3 className="text-white font-bold text-lg mb-4">STUDIO ADDRESS</h3>
           <ul className="space-y-2">
-            <li className="flex items-center"><FaMapMarkerAlt className="mr-3" />VIZAG | VIJAYAWADA | RAJAMANDURY | HYDERABAD</li>
-            <li className="flex items-center"><FaPhoneAlt className="mr-3" />+91 954 265 8504</li>
-            <li className="flex items-center"><FaEnvelope className="mr-3" />mv@newmvhairstudio.in</li>
+            <li className="flex items-center"><FaMapMarkerAlt className="mr-3" />VIZAG | VIJAYAWADA | RAJAHMUNDRY | HYDERABAD</li>
+            <li className="flex items-center">
+              <FaPhoneAlt className="mr-3" />
+              <a href="tel:+919542658504" className="hover:underline">+91 954 265 8504</a>
+            </li>
+            <li className="flex items-center">
+              <FaEnvelope className="mr-3" />
+              <a href="mailto:mv@newmvhairstudio.in" className="hover:underline">mv@newmvhairstudio.in</a>
+            </li>
           </ul>
         </div>
 
-        {/* SOCIAL FEED */}
+        {/* SOCIAL LINKS */}
         <div>
-          <h3 className="text-white font-bold text-lg mb-4">SOCIAL FEED</h3>
+          <h3 className="text-white font-bold text-lg mb-4">CONNECT WITH US</h3>
           <ul className="space-y-2">
-            <li className="flex items-center"><FaFacebookF className="mr-3" />Facebook</li>
-            <li className="flex items-center"><FaTwitter className="mr-3" />Twitter</li>
-            <li className="flex items-center"><FaGooglePlusG className="mr-3" />Google Plus</li>
-            <li className="flex items-center"><FaLinkedinIn className="mr-3" />LinkedIn</li>
-            <li className="flex items-center"><FaYoutube className="mr-3" />YouTube</li>
+            <li className="flex items-center">
+              <FaFacebookF className="mr-3" />
+              <a href="https://www.facebook.com/yourpage" target="_blank" rel="noopener noreferrer" className="hover:underline">Facebook</a>
+            </li>
+            <li className="flex items-center">
+              <FaInstagram className="mr-3" />
+              <a href="https://www.instagram.com/yourprofile" target="_blank" rel="noopener noreferrer" className="hover:underline">Instagram</a>
+            </li>
+            <li className="flex items-center">
+              <FaLinkedinIn className="mr-3" />
+              <a href="https://www.linkedin.com/in/yourprofile" target="_blank" rel="noopener noreferrer" className="hover:underline">LinkedIn</a>
+            </li>
+            <li className="flex items-center">
+              <FaYoutube className="mr-3" />
+              <a href="https://www.youtube.com/channel/yourchannel" target="_blank" rel="noopener noreferrer" className="hover:underline">YouTube</a>
+            </li>
+            <li className="flex items-center">
+              <FaWhatsapp className="mr-3" />
+              <a href="https://wa.me/919542658504" target="_blank" rel="noopener noreferrer" className="hover:underline">WhatsApp</a>
+            </li>
           </ul>
         </div>
 
         {/* NEWSLETTERS */}
         <div>
-          <h3 className="text-white font-bold text-lg mb-4">NEWSLETTERS</h3>
-          <p className="mb-4 text-sm">Enter your email address to receive new patient information and other useful updates.</p>
-          <form className="flex bg-[#1e1e1e] rounded-full overflow-hidden">
-            <input
-              type="email"
-              placeholder="Email Address"
-              className="bg-transparent text-white px-4 py-2 w-full outline-none"
-            />
-            <button
-              type="submit"
-              className="bg-[#aa9144] text-white px-6 text-sm font-semibold hover:bg-[#c0a84c] transition"
-            >
-              SUBSCRIBE
-            </button>
-          </form>
+          <h3 className="text-white font-bold text-lg mb-4">SUBSCRIBE</h3>
+          <p className="mb-4 text-sm">Click below to send us an email and receive updates & offers.</p>
+          <a
+            href="mailto:mv@newmvhairstudio.in?subject=Subscribe%20Me&body=Please%20subscribe%20me%20to%20your%20newsletter."
+            className="inline-block bg-[#aa9144] text-white px-6 py-2 text-sm font-semibold rounded-full hover:bg-[#c0a84c] transition"
+          >
+            SUBSCRIBE VIA EMAIL
+          </a>
         </div>
       </div>
 

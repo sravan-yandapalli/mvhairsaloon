@@ -15,7 +15,11 @@ const services = [
 
 export default function ScrollingLabels() {
   return (
+<<<<<<< HEAD
     <div className="w-full overflow-hidden border-y-2 border-yellow-400 bg-black py-4 mt-3 mb-3">
+=======
+    <div className="w-full overflow-hidden border-y-2 border-yellow-400 bg-black py-4">
+>>>>>>> 343f451fae4b866886b17a8e6e4492a505d9c4b7
       <div className="flex animate-scroll whitespace-nowrap">
         {[...services, ...services].map((service, index) => (
           <span

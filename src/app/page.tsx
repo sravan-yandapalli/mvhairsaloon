@@ -1,4 +1,5 @@
 'use client';
+<<<<<<< HEAD
 
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
@@ -9,16 +10,34 @@ import Service from './service/page';
 import Footer from './fotter/page';
 import HeroSection from './hero/page';
 import WhyChooseUs from './why/page';
+=======
+import { useEffect, useState } from 'react';
+
+import BookAppointment from './appointment/page';
+import Navbar from './nav/page'; 
+import Service from './service/page';
+import Footer from './fotter/page';
+import HeroSection from './hero/page';
+import WhyChooseUs from './why/page';
+import Image from 'next/image';
+>>>>>>> 343f451fae4b866886b17a8e6e4492a505d9c4b7
 import BlogUploader from './blogs/page';
 import Feedback from './review/page';
 import HomeServices from './hservice/page';
 import ScrollingLabels from './scroll/page';
+<<<<<<< HEAD
 import HairTransplantFAQ from './faq/page';
+=======
+>>>>>>> 343f451fae4b866886b17a8e6e4492a505d9c4b7
 
 export default function Home() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+<<<<<<< HEAD
+=======
+    // Simulate loading duration (e.g., 2 seconds)
+>>>>>>> 343f451fae4b866886b17a8e6e4492a505d9c4b7
     const timer = setTimeout(() => setLoading(false), 2000);
     return () => clearTimeout(timer);
   }, []);
@@ -27,7 +46,11 @@ export default function Home() {
     return (
       <div className="flex items-center justify-center h-screen bg-black">
         <Image
+<<<<<<< HEAD
           src="/assets/studio-loader.gif"
+=======
+          src="/assets/studio-loader.gif" // your loading logo or animation
+>>>>>>> 343f451fae4b866886b17a8e6e4492a505d9c4b7
           alt="Loading"
           width={150}
           height={150}
@@ -45,7 +68,11 @@ export default function Home() {
         <HeroSection />
       </section>
 
+<<<<<<< HEAD
       <ScrollingLabels />
+=======
+      <ScrollingLabels/>
+>>>>>>> 343f451fae4b866886b17a8e6e4492a505d9c4b7
 
       <section id="why">
         <WhyChooseUs />
@@ -63,20 +90,31 @@ export default function Home() {
         <BlogUploader />
       </section>
 
+<<<<<<< HEAD
       <section id="appointments">
         <BookAppointment />
       </section>
 
       <HairTransplantFAQ />
 
+=======
+>>>>>>> 343f451fae4b866886b17a8e6e4492a505d9c4b7
       <section id="reviews">
         <Feedback />
       </section>
 
+<<<<<<< HEAD
+=======
+      <section id="appointments">
+        <BookAppointment />
+      </section>
+
+>>>>>>> 343f451fae4b866886b17a8e6e4492a505d9c4b7
       <section id="contact">
         <Footer />
       </section>
 
+<<<<<<< HEAD
       {/* Phone Icon */}
       <a
         href="tel:+919876543210"
@@ -92,6 +130,9 @@ export default function Home() {
       </a>
 
       {/* WhatsApp Icon */}
+=======
+      {/* WhatsApp Floating Icon */}
+>>>>>>> 343f451fae4b866886b17a8e6e4492a505d9c4b7
       <a
         href="https://wa.me/919876543210?text=Hi%2C%20I%20am%20interested%20in%20your%20non-surgical%20hair%20replacement%20services"
         target="_blank"

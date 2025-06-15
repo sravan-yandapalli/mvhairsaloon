@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+<<<<<<< HEAD
 import { IoMenu, IoClose } from "react-icons/io5";
 
 const Navbar: React.FC = () => {
@@ -18,6 +19,23 @@ const Navbar: React.FC = () => {
         <nav className="flex items-center justify-between h-[70px]">
           {/* Logo */}
           <div className="flex items-center space-x-3">
+=======
+
+const Navbar: React.FC = () => {
+    const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+    const toggleMobileMenu = () => {
+        setMobileMenuOpen(!isMobileMenuOpen);
+    };
+
+    return (
+        <div className="w-full">
+            <header className="w-full bg-black text-white shadow-md">
+                <div className="w-full px-4 sm:px-6 lg:px-8">
+                    <nav className="max-w-[1600px] mx-auto flex items-center justify-between py-3">
+                        {/* Logo (icon + text image) */}
+                        <div className="flex items-center space-x-3">
+>>>>>>> 343f451fae4b866886b17a8e6e4492a505d9c4b7
                             {/* Logo Icon */}
                             <div className="relative h-8 bottom-1.5 w-13">
                                 <Image
@@ -40,6 +58,7 @@ const Navbar: React.FC = () => {
                             </div>
                         </div>
 
+<<<<<<< HEAD
           {/* Desktop Menu */}
           <div className="hidden md:flex items-center space-x-6">
             {["Home", "Services", "Blogs", "Reviews", "Contact Us"].map((text, index) => (
@@ -105,6 +124,83 @@ const Navbar: React.FC = () => {
       )}
     </header>
   );
+=======
+                        {/* Desktop Menu */}
+                        <div className="hidden md:flex items-center space-x-6">
+                            <Link href="/" className="text-lg hover:text-[#eacb5b] transition">
+                                Home
+                            </Link>
+                            <Link href="#service" className="text-lg hover:text-[#eacb5b] transition">
+                                Services
+                            </Link>
+                            <Link href="#blogs" className="text-lg hover:text-[#eacb5b] transition">
+                                Blogs
+                            </Link>
+                            <Link href="#reviews" className="text-lg hover:text-[#eacb5b] transition">
+                                Reviews
+                            </Link>
+                            <Link href="#contact" className="text-lg hover:text-[#eacb5b] transition">
+                                Contact Us
+                            </Link>
+                            <Link
+                                href="#appointments"
+                                className="bg-[#eacb5b] text-black px-4 py-2 rounded-lg text-lg font-bold hover:bg-yellow-300 transition"
+                            >
+                                Book Appointments
+                            </Link>
+                            <Link
+                                href="#home-services"
+                                className="bg-[#24A0ED] text-white px-4 py-2 rounded-lg text-lg font-bold hover:bg-blue-300 transition"
+                            >
+                                Home Services
+                            </Link>
+                        </div>
+
+                        {/* Mobile Menu Button */}
+                        <div className="md:hidden">
+                            <button onClick={toggleMobileMenu} className="text-3xl focus:outline-none">
+                                ☰
+                            </button>
+                        </div>
+                    </nav>
+                </div>
+
+                {/* Mobile Menu Dropdown */}
+                {isMobileMenuOpen && (
+                    <div className="md:hidden px-4 py-2 space-y-2 bg-white text-black">
+                        <Link href="/" className="block text-lg hover:text-[#eacb5b] transition">
+                            Home
+                        </Link>
+                        <Link href="#service" className="block text-lg hover:text-[#eacb5b] transition">
+                            Services
+                        </Link>
+                        <Link href="#blogs" className="block text-lg hover:text-[#eacb5b] transition">
+                            Blogs
+                        </Link>
+                        <Link href="#service" className="block text-lg hover:text-[#eacb5b] transition">
+                            Reviews
+                        </Link>
+                        <Link href="#contact" className="block text-lg hover:text-[#eacb5b] transition">
+                            Contact Us
+                        </Link>
+                        <Link
+                            href="#appointments"
+                            className="block bg-[#eacb5b] text-black px-4 py-2 rounded-lg text-lg font-semibold text-center hover:bg-yellow-300 transition"
+                        >
+                            Book Appointments
+                        </Link>
+                        <Link
+                                href="#home-services"
+                                className="bg-[#24A0ED] text-white px-34 py-2 rounded-lg text-lg font-bold hover:bg-blue-300 transition"
+                            >
+                                Home Services
+                            </Link>
+                    </div>
+                )}
+            </header>
+        </div>
+    );
+>>>>>>> 343f451fae4b866886b17a8e6e4492a505d9c4b7
 };
 
 export default Navbar;

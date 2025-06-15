@@ -15,12 +15,20 @@ export default function Feedback() {
   const [error, setError] = useState<string | null>(null);
   const [totalViews, setTotalViews] = useState<number>(0);
 
+<<<<<<< HEAD
+=======
+  // Form state
+>>>>>>> 343f451fae4b866886b17a8e6e4492a505d9c4b7
   const [name, setName] = useState("");
   const [comment, setComment] = useState("");
   const [rating, setRating] = useState(0);
   const [submitting, setSubmitting] = useState(false);
   const [formError, setFormError] = useState("");
 
+<<<<<<< HEAD
+=======
+  // Fetch feedback and views on mount
+>>>>>>> 343f451fae4b866886b17a8e6e4492a505d9c4b7
   useEffect(() => {
     async function fetchFeedback() {
       try {
@@ -76,6 +84,10 @@ export default function Feedback() {
     }
   };
 
+<<<<<<< HEAD
+=======
+  // Show only top reviews (rating >= 4), sorted by rating desc, timestamp desc, max 10
+>>>>>>> 343f451fae4b866886b17a8e6e4492a505d9c4b7
   const topReviews = feedbacks
     .filter((fb) => fb.rating >= 4)
     .sort((a, b) => {
@@ -85,6 +97,7 @@ export default function Feedback() {
     .slice(0, 10);
 
   return (
+<<<<<<< HEAD
     <section className="max-w-6xl mx-auto p-6 space-y-12 font-sans bg-white my-24 rounded-3xl shadow-xl">
       <h2 className="text-5xl font-extrabold text-[#004f73] text-center mb-6">
         What Our Users Say
@@ -96,17 +109,37 @@ export default function Feedback() {
         className="bg-gradient-to-br from-white to-gray-50 border border-gray-200 shadow-lg p-8 rounded-2xl space-y-6 max-w-2xl mx-auto"
       >
         <h3 className="text-3xl font-bold text-gray-900">Leave a Feedback</h3>
+=======
+    <section className="max-w-5xl mx-auto p-6 space-y-10 font-sans bg-white my-20">
+      <h2 className="text-4xl font-bold text-[#004f73] text-center mb-6">What Our Users Say</h2>
+
+      {/* Form */}
+      <form
+        onSubmit={handleSubmit}
+        className="bg-white border border-gray-300 shadow-md p-6 rounded-lg space-y-5 max-w-xl mx-auto"
+      >
+        <h3 className="text-2xl font-semibold text-gray-900">Leave a Feedback</h3>
+>>>>>>> 343f451fae4b866886b17a8e6e4492a505d9c4b7
 
         <input
           type="text"
           placeholder="Your Name"
+<<<<<<< HEAD
           className="w-full border border-gray-300 rounded-xl p-4 text-lg text-gray-900 placeholder-gray-400 shadow-sm focus:outline-none focus:ring-2 focus:ring-[#004f73]"
           value={name}
           onChange={(e) => setName(e.target.value)}
+=======
+          className="w-full border border-gray-300 rounded-md p-3 text-lg text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#004f73]"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          spellCheck={false}
+          data-ms-editor="true"
+>>>>>>> 343f451fae4b866886b17a8e6e4492a505d9c4b7
         />
 
         <textarea
           placeholder="Your Comment"
+<<<<<<< HEAD
           className="w-full border border-gray-300 rounded-xl p-4 text-lg text-gray-900 placeholder-gray-400 shadow-sm focus:outline-none focus:ring-2 focus:ring-[#004f73]"
           rows={4}
           value={comment}
@@ -114,13 +147,28 @@ export default function Feedback() {
         />
 
         <div className="flex items-center space-x-2">
+=======
+          className="w-full border border-gray-300 rounded-md p-3 text-lg text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#004f73]"
+          rows={4}
+          value={comment}
+          onChange={(e) => setComment(e.target.value)}
+          spellCheck={false}
+          data-ms-editor="true"
+        />
+
+        <div className="flex items-center space-x-3">
+>>>>>>> 343f451fae4b866886b17a8e6e4492a505d9c4b7
           {[1, 2, 3, 4, 5].map((num) => (
             <svg
               key={num}
               onClick={() => setRating(num)}
+<<<<<<< HEAD
               className={`w-9 h-9 cursor-pointer transition-transform duration-200 hover:scale-110 ${
                 num <= rating ? "text-yellow-400" : "text-gray-300"
               }`}
+=======
+              className={`w-8 h-8 cursor-pointer transition-colors duration-200 ${num <= rating ? "text-yellow-400" : "text-gray-300"}`}
+>>>>>>> 343f451fae4b866886b17a8e6e4492a505d9c4b7
               fill="currentColor"
               viewBox="0 0 20 20"
             >
@@ -132,6 +180,7 @@ export default function Feedback() {
         <button
           type="submit"
           disabled={submitting}
+<<<<<<< HEAD
           className="bg-[#004f73] text-white px-6 py-3 rounded-xl font-semibold hover:bg-[#003350] transition-colors duration-300 disabled:opacity-60"
         >
           {submitting ? "Submitting..." : "Submit Feedback"}
@@ -139,10 +188,19 @@ export default function Feedback() {
 
         {formError && (
           <p className="text-red-600 font-medium mt-2">{formError}</p>
+=======
+          className="bg-[#004f73] text-white px-6 py-3 rounded-lg font-semibold hover:bg-[#003350] transition-colors duration-200 disabled:opacity-50"
+        >
+          {submitting ? "Submitting..." : "Submit"}
+        </button>
+        {formError && (
+          <p className="text-red-600 font-semibold mt-2">{formError}</p>
+>>>>>>> 343f451fae4b866886b17a8e6e4492a505d9c4b7
         )}
       </form>
 
       {/* Feedback Summary */}
+<<<<<<< HEAD
       <div className="text-center text-gray-800 space-y-3">
         <p className="text-2xl font-medium">
           Total Feedbacks:{" "}
@@ -178,12 +236,41 @@ export default function Feedback() {
                 <div className="text-yellow-500 font-semibold text-lg">
                   ⭐ {rating} / 5
                 </div>
+=======
+      <div className="text-center text-gray-700 space-y-2">
+        <p className="text-2xl font-semibold text-[#004f73]">
+          Total Feedbacks: <span className="text-black">{feedbacks.length}</span>
+        </p>
+        <p className="text-2xl font-semibold text-[#004f73]">
+          Total Page Views: <span className="text-black">{totalViews}</span>
+        </p>
+      </div>
+
+      {/* Top Reviews with horizontal scroll */}
+      <div>
+        <h3 className="text-3xl font-semibold text-[#004f73] mb-6">Top Reviews</h3>
+        {topReviews.length === 0 && <p className="text-gray-600 text-lg">No top reviews yet.</p>}
+
+        <div className="overflow-x-auto">
+          <ul className="flex space-x-6 pb-4 min-w-max">
+            {topReviews.map(({ id, name, comment, rating }) => (
+              <li
+                key={id}
+                className="min-w-[280px] border border-gray-300 rounded-lg p-6 bg-white shadow hover:shadow-lg transition-shadow duration-300"
+              >
+                <p className="font-bold text-[#004f73] text-xl mb-2">{name}</p>
+                <p className="italic text-gray-700 mb-4">{comment}</p>
+                <p className="text-gray-800 font-medium">
+                  Rating: <span className="text-yellow-500">{rating} / 5</span>
+                </p>
+>>>>>>> 343f451fae4b866886b17a8e6e4492a505d9c4b7
               </li>
             ))}
           </ul>
         </div>
       </div>
 
+<<<<<<< HEAD
       {loading && (
         <p className="text-center text-gray-500 text-lg mt-6">
           Loading feedback...
@@ -194,6 +281,10 @@ export default function Feedback() {
           Error: {error}
         </p>
       )}
+=======
+      {loading && <p className="text-center text-gray-600 text-lg mt-6">Loading feedback...</p>}
+      {error && <p className="text-center text-red-600 font-semibold mt-6">Error: {error}</p>}
+>>>>>>> 343f451fae4b866886b17a8e6e4492a505d9c4b7
     </section>
   );
 }

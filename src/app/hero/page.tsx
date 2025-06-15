@@ -26,7 +26,11 @@ const HeroSection = () => {
   }, []);
 
   return (
+<<<<<<< HEAD
     <section className="w-full min-h-screen flex flex-col md:flex-row items-center justify-between bg-[#0C1B33] text-white px-6 sm:px-10 md:px-16 lg:px-24 py-10 mt-15">
+=======
+    <section className="w-full min-h-screen flex flex-col md:flex-row items-center justify-between bg-[#0C1B33] text-white px-6 sm:px-10 md:px-16 lg:px-24 py-10">
+>>>>>>> 343f451fae4b866886b17a8e6e4492a505d9c4b7
       
       {/* Left - Text Content */}
       <div className="w-full md:w-1/2 space-y-6">

@@ -1,13 +1,22 @@
+<<<<<<< HEAD
 "use client";
 
 import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
+=======
+'use client';
+
+import React, { useEffect, useState } from 'react';
+import { motion } from 'framer-motion';
+import Image from 'next/image';
+>>>>>>> 343f451fae4b866886b17a8e6e4492a505d9c4b7
 
 export default function BlogsPage() {
   const [isAdmin, setIsAdmin] = useState(false);
   const [showUploadModal, setShowUploadModal] = useState(false);
   const [showPasswordModal, setShowPasswordModal] = useState(false);
+<<<<<<< HEAD
   const [adminPassword, setAdminPassword] = useState("");
   const [mediaFiles, setMediaFiles] = useState<File[]>([]);
   const [mediaURLs, setMediaURLs] = useState<string[]>([]);
@@ -17,6 +26,19 @@ export default function BlogsPage() {
     if (token === process.env.NEXT_PUBLIC_ADMIN_SECRET) {
       setIsAdmin(true);
     }
+=======
+  const [adminPassword, setAdminPassword] = useState('');
+  const [mediaFiles, setMediaFiles] = useState<File[]>([]);
+  const [mediaURLs, setMediaURLs] = useState<string[]>([]);
+
+  // On mount, load saved admin status from localStorage
+  useEffect(() => {
+    const token = localStorage.getItem('adminToken');
+    if (token === process.env.NEXT_PUBLIC_ADMIN_SECRET) {
+      setIsAdmin(true);
+    }
+    // You might also want to load existing media URLs from server here
+>>>>>>> 343f451fae4b866886b17a8e6e4492a505d9c4b7
   }, []);
 
   const handleUploadClick = () => {
@@ -29,12 +51,20 @@ export default function BlogsPage() {
 
   const handlePasswordSubmit = () => {
     if (adminPassword === process.env.NEXT_PUBLIC_ADMIN_SECRET) {
+<<<<<<< HEAD
       localStorage.setItem("adminToken", adminPassword);
+=======
+      localStorage.setItem('adminToken', adminPassword);
+>>>>>>> 343f451fae4b866886b17a8e6e4492a505d9c4b7
       setIsAdmin(true);
       setShowPasswordModal(false);
       setShowUploadModal(true);
     } else {
+<<<<<<< HEAD
       alert("Incorrect admin password.");
+=======
+      alert('Incorrect admin password.');
+>>>>>>> 343f451fae4b866886b17a8e6e4492a505d9c4b7
     }
   };
 
@@ -46,6 +76,7 @@ export default function BlogsPage() {
   };
 
   const handleUpload = async () => {
+<<<<<<< HEAD
     if (mediaFiles.length === 0)
       return alert("Please select files to upload.");
 
@@ -58,12 +89,29 @@ export default function BlogsPage() {
         body: formData,
         headers: {
           Authorization: `Bearer ${localStorage.getItem("adminToken")}`,
+=======
+    if (mediaFiles.length === 0) return alert("Please select files to upload.");
+
+    const formData = new FormData();
+    mediaFiles.forEach(file => formData.append('files', file));
+
+    try {
+      const res = await fetch('/api/upload', {
+        method: 'POST',
+        body: formData,
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('adminToken')}`,
+>>>>>>> 343f451fae4b866886b17a8e6e4492a505d9c4b7
         },
       });
 
       if (res.ok) {
         const data = await res.json();
+<<<<<<< HEAD
         setMediaURLs((prev) => [...prev, ...data.urls]);
+=======
+        setMediaURLs(prev => [...prev, ...data.urls]);
+>>>>>>> 343f451fae4b866886b17a8e6e4492a505d9c4b7
         setMediaFiles([]);
         setShowUploadModal(false);
       } else {
@@ -78,17 +126,30 @@ export default function BlogsPage() {
   const handleDelete = async (url: string) => {
     if (!confirm("Are you sure you want to delete this media?")) return;
 
+<<<<<<< HEAD
     const key = url.split(".com/")[1];
     try {
       const res = await fetch(`/api/upload?key=${encodeURIComponent(key)}`, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${localStorage.getItem("adminToken")}`,
+=======
+    const key = url.split('.com/')[1];
+    try {
+      const res = await fetch(`/api/upload?key=${encodeURIComponent(key)}`, {
+        method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('adminToken')}`,
+>>>>>>> 343f451fae4b866886b17a8e6e4492a505d9c4b7
         },
       });
 
       if (res.ok) {
+<<<<<<< HEAD
         setMediaURLs((prev) => prev.filter((u) => u !== url));
+=======
+        setMediaURLs(prev => prev.filter(u => u !== url));
+>>>>>>> 343f451fae4b866886b17a8e6e4492a505d9c4b7
       } else {
         alert("Delete failed");
       }
@@ -99,6 +160,7 @@ export default function BlogsPage() {
   };
 
   return (
+<<<<<<< HEAD
     <div className="p-6 bg-gradient-to-br from-white to-gray-100 min-h-screen text-gray-900 mb-15 mt-15">
       {/* Header */}
       <div className="flex justify-between items-center mb-6 flex-wrap gap-4">
@@ -113,12 +175,25 @@ export default function BlogsPage() {
         <button
           onClick={handleUploadClick}
           className="bg-blue-600 text-white px-5 py-2 rounded-lg hover:bg-blue-700 transition font-medium shadow-md"
+=======
+    <div className="p-4 bg-gradient-to-b from-purple-900 to-black min-h-screen text-white">
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-4xl font-extrabold bg-gradient-to-r from-yellow-400 to-pink-500 bg-clip-text text-transparent">
+          Blogs Gallery
+        </h1>
+        <button
+          onClick={handleUploadClick}
+          className="text-white bg-gradient-to-r from-blue-600 to-indigo-700 hover:from-blue-700 hover:to-indigo-800 px-4 py-2 rounded shadow-lg transition transform hover:scale-105"
+>>>>>>> 343f451fae4b866886b17a8e6e4492a505d9c4b7
         >
           ⬆ Upload
         </button>
       </div>
 
+<<<<<<< HEAD
       {/* Media Gallery */}
+=======
+>>>>>>> 343f451fae4b866886b17a8e6e4492a505d9c4b7
       <motion.div
         className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"
         initial={{ opacity: 0 }}
@@ -128,23 +203,37 @@ export default function BlogsPage() {
         {mediaURLs.map((url, idx) => (
           <motion.div
             key={idx}
+<<<<<<< HEAD
             className="relative overflow-hidden rounded-xl shadow-lg border border-gray-200 bg-white p-1 hover:scale-105 transition-transform duration-300"
           >
             {/* Image or Video */}
             {/\.(jpe?g|png|gif|webp)$/i.test(url) ? (
               <div className="relative w-full h-60 rounded-md overflow-hidden">
+=======
+            className="relative overflow-hidden rounded-2xl shadow-xl border border-white/10 bg-white/10 backdrop-blur-md p-1 hover:scale-105 transition-transform duration-300"
+          >
+            {/* Container for next/image must be relative with fixed height */}
+            {/\.(jpe?g|png|gif|webp)$/i.test(url) ? (
+              <div className="relative w-full h-100 rounded-xl overflow-hidden">
+>>>>>>> 343f451fae4b866886b17a8e6e4492a505d9c4b7
                 <Image
                   src={url}
                   alt={`Media ${idx}`}
                   fill
                   sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
+<<<<<<< HEAD
                   className="object-cover rounded-md"
                   priority={idx < 4}
+=======
+                  className="object-cover rounded-xl"
+                  priority={idx < 4} // prioritize first few images for better UX
+>>>>>>> 343f451fae4b866886b17a8e6e4492a505d9c4b7
                 />
               </div>
             ) : (
               <video
                 controls
+<<<<<<< HEAD
                 className="w-full h-60 object-cover rounded-md bg-black"
                 preload="metadata"
               >
@@ -154,11 +243,26 @@ export default function BlogsPage() {
             )}
 
             {/* Delete button for admin */}
+=======
+                className="w-full h-72 object-cover rounded-xl bg-black"
+                preload="metadata"
+              >
+                <source src={url} />
+                Sorry, your browser doesn&#39;t support embedded videos.
+              </video>
+            )}
+
+            {/* Show delete icon only if admin */}
+>>>>>>> 343f451fae4b866886b17a8e6e4492a505d9c4b7
             {isAdmin && (
               <button
                 onClick={() => handleDelete(url)}
                 title="Delete media"
+<<<<<<< HEAD
                 className="absolute top-2 right-2 bg-red-500 hover:bg-red-600 text-white px-2 py-1 rounded shadow-lg text-sm"
+=======
+                className="absolute top-2 right-2 bg-red-600 hover:bg-red-700 text-white px-2 py-1 rounded shadow-lg transition"
+>>>>>>> 343f451fae4b866886b17a8e6e4492a505d9c4b7
               >
                 ✖
               </button>
@@ -167,11 +271,19 @@ export default function BlogsPage() {
         ))}
       </motion.div>
 
+<<<<<<< HEAD
       {/* Admin Login Modal */}
       {showPasswordModal && (
         <div className="fixed inset-0 bg-black bg-opacity-70 flex justify-center items-center z-50">
           <motion.div
             initial={{ scale: 0.9, opacity: 0 }}
+=======
+      {/* Admin Password Modal */}
+      {showPasswordModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-80 flex justify-center items-center z-50">
+          <motion.div
+            initial={{ scale: 0.8, opacity: 0 }}
+>>>>>>> 343f451fae4b866886b17a8e6e4492a505d9c4b7
             animate={{ scale: 1, opacity: 1 }}
             className="bg-white text-black rounded-lg p-6 w-full max-w-sm shadow-2xl"
           >
@@ -203,17 +315,27 @@ export default function BlogsPage() {
 
       {/* Upload Modal */}
       {showUploadModal && (
+<<<<<<< HEAD
         <div className="fixed inset-0 bg-black bg-opacity-70 flex justify-center items-center z-50">
           <motion.div
             initial={{ scale: 0.9, opacity: 0 }}
+=======
+        <div className="fixed inset-0 bg-black bg-opacity-80 flex justify-center items-center z-50">
+          <motion.div
+            initial={{ scale: 0.8, opacity: 0 }}
+>>>>>>> 343f451fae4b866886b17a8e6e4492a505d9c4b7
             animate={{ scale: 1, opacity: 1 }}
             className="bg-white text-black rounded-lg p-6 w-full max-w-md shadow-2xl"
           >
             <h2 className="text-2xl font-bold mb-4 text-center">Upload Media</h2>
             <div className="relative border-2 border-dashed border-gray-400 rounded-lg p-4 h-40 flex flex-col justify-center items-center hover:border-blue-600 transition-all cursor-pointer">
+<<<<<<< HEAD
               <span className="text-sm text-gray-600">
                 Drag & drop or click to upload
               </span>
+=======
+              <span className="text-sm text-gray-600">Drag & drop or click to upload</span>
+>>>>>>> 343f451fae4b866886b17a8e6e4492a505d9c4b7
               <input
                 type="file"
                 accept="image/*,video/*"

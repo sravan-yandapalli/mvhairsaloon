@@ -54,9 +54,15 @@ const services = [
 
 const Service = () => {
   return (
+<<<<<<< HEAD
     <div className="bg-white text-gray-800 py-16 px-4 sm:px-8">
       <div className="max-w-7xl mx-auto">
         <h2 className="text-3xl sm:text-4xl font-bold mb-12 text-center text-gray-900">
+=======
+    <div className="bg-[#0C1B33] text-white py-16 px-4 sm:px-8">
+      <div className="max-w-7xl mx-auto">
+        <h2 className="text-3xl sm:text-4xl select-none font-bold mb-12 text-center">
+>>>>>>> 343f451fae4b866886b17a8e6e4492a505d9c4b7
           Our Services
         </h2>
 
@@ -64,9 +70,15 @@ const Service = () => {
           {services.map((service, index) => (
             <div
               key={index}
+<<<<<<< HEAD
               className="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300"
             >
               <div className="relative w-full h-60 sm:h-72">
+=======
+              className="bg-[#1e1e1e] rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-shadow duration-300"
+            >
+              <div className="relative w-full h-100 sm:h-80">
+>>>>>>> 343f451fae4b866886b17a8e6e4492a505d9c4b7
                 <Image
                   src={service.image}
                   alt={service.title}
@@ -76,10 +88,17 @@ const Service = () => {
                 />
               </div>
               <div className="p-6">
+<<<<<<< HEAD
                 <h3 className="text-xl font-semibold mb-2 text-gray-900">
                   {service.title}
                 </h3>
                 <p className="text-gray-600 text-sm">{service.description}</p>
+=======
+                <h3 className="text-xl font-semibold mb-2">
+                  {service.title}
+                </h3>
+                <p className="text-gray-300 text-sm">{service.description}</p>
+>>>>>>> 343f451fae4b866886b17a8e6e4492a505d9c4b7
               </div>
             </div>
           ))}

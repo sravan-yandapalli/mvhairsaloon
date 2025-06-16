@@ -44,14 +44,14 @@ export default function Feedback() {
     fetchFeedback();
   }, []);
 
-  // Handle form submit
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setFormError("");
-    if (!name.trim() || !comment.trim() || rating < 1) {
-      setFormError("Please fill all fields and select a rating.");
+    if (!name || !comment || rating === 0) {
+      setFormError("Please fill out all fields and select a rating.");
       return;
     }
+
     setSubmitting(true);
     try {
       const res = await fetch("/api/feedback", {
@@ -63,7 +63,7 @@ export default function Feedback() {
       if (!res.ok) throw new Error("Failed to submit feedback");
 
       const newFeedback: Feedback = await res.json();
-      setFeedbacks((prev: Feedback[]) => [newFeedback, ...prev]);
+      setFeedbacks((prev) => [newFeedback, ...prev]);
       setName("");
       setComment("");
       setRating(0);
@@ -103,14 +103,20 @@ export default function Feedback() {
           className="w-full border border-gray-300 rounded-md p-3 text-lg text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#004f73]"
           value={name}
           onChange={(e) => setName(e.target.value)}
+          spellCheck={false}
+          data-ms-editor="true"
         />
+
         <textarea
           placeholder="Your Comment"
           className="w-full border border-gray-300 rounded-md p-3 text-lg text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#004f73]"
           rows={4}
           value={comment}
           onChange={(e) => setComment(e.target.value)}
+          spellCheck={false}
+          data-ms-editor="true"
         />
+
         <div className="flex items-center space-x-3">
           {[1, 2, 3, 4, 5].map((num) => (
             <svg

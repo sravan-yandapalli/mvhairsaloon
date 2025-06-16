@@ -66,7 +66,7 @@ const Service = () => {
               key={index}
               className="bg-[#1e1e1e] rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-shadow duration-300"
             >
-              <div className="relative w-full h-64 sm:h-80">
+              <div className="relative w-full h-100 sm:h-80">
                 <Image
                   src={service.image}
                   alt={service.title}

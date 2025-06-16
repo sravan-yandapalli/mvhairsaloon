@@ -100,13 +100,13 @@ const Navbar: React.FC = () => {
                     </Link>
                     <Link
                         href="#appointments"
-                        className="block bg-[#eacb5b] text-black px-4 py-2 rounded-lg text-lg font-semibold text-center hover:bg-yellow-300 transition"
+                        className="block bg-[#EC5800] text-white px-4 py-2 rounded-lg text-lg font-semibold text-center hover:bg-white hover:text-black transition"
                     >
                         Book Appointments
                     </Link>
                     <Link
                         href="#home-services"
-                        className="bg-[#24A0ED] text-white px-4 py-2 rounded-lg text-lg font-bold hover:bg-blue-300 transition"
+                        className="bg-[#DAA520] text-white px-4 py-2 rounded-lg text-lg font-bold hover:bg-blue-400 hover:text-black transition"
                     >
                         Home Services
                     </Link>

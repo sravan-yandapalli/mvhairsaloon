@@ -1,4 +1,3 @@
-
 'use client';
 
 import React, { useEffect, useState } from 'react';
@@ -9,26 +8,19 @@ export default function BlogsPage() {
   const [isAdmin, setIsAdmin] = useState(false);
   const [showUploadModal, setShowUploadModal] = useState(false);
   const [showPasswordModal, setShowPasswordModal] = useState(false);
-
   const [adminPassword, setAdminPassword] = useState('');
   const [mediaFiles, setMediaFiles] = useState<File[]>([]);
   const [mediaURLs, setMediaURLs] = useState<string[]>([]);
 
-  // On mount, load saved admin status from localStorage
   useEffect(() => {
     const token = localStorage.getItem('adminToken');
     if (token === process.env.NEXT_PUBLIC_ADMIN_SECRET) {
       setIsAdmin(true);
     }
-    // You might also want to load existing media URLs from server here
   }, []);
 
   const handleUploadClick = () => {
-    if (isAdmin) {
-      setShowUploadModal(true);
-    } else {
-      setShowPasswordModal(true);
-    }
+    isAdmin ? setShowUploadModal(true) : setShowPasswordModal(true);
   };
 
   const handlePasswordSubmit = () => {
@@ -51,7 +43,6 @@ export default function BlogsPage() {
 
   const handleUpload = async () => {
     if (mediaFiles.length === 0) return alert("Please select files to upload.");
-
     const formData = new FormData();
     mediaFiles.forEach(file => formData.append('files', file));
 
@@ -80,8 +71,8 @@ export default function BlogsPage() {
 
   const handleDelete = async (url: string) => {
     if (!confirm("Are you sure you want to delete this media?")) return;
-
     const key = url.split('.com/')[1];
+
     try {
       const res = await fetch(`/api/upload?key=${encodeURIComponent(key)}`, {
         method: 'DELETE',
@@ -102,16 +93,17 @@ export default function BlogsPage() {
   };
 
   return (
-    <div className="p-6">
+    <div className="p-6 min-h-screen bg-[#fdfdfd] text-[#111]">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold">Blogs Media Gallery</h1>
+        <h1 className="text-3xl font-bold text-gray-800">📸 Blogs Media Gallery</h1>
         <button
           onClick={handleUploadClick}
-          className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+          className="px-4 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700"
         >
-          Upload Media
+          + Upload Media
         </button>
       </div>
+
       <motion.div
         className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"
         initial={{ opacity: 0 }}
@@ -121,37 +113,34 @@ export default function BlogsPage() {
         {mediaURLs.map((url, idx) => (
           <motion.div
             key={idx}
-            className="relative overflow-hidden rounded-2xl shadow-xl border border-white/10 bg-white/10 backdrop-blur-md p-1 hover:scale-105 transition-transform duration-300"
+            className="relative bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition duration-300"
           >
-            {/* Container for next/image must be relative with fixed height */}
             {/\.(jpe?g|png|gif|webp)$/i.test(url) ? (
-              <div className="relative w-full h-72 rounded-xl overflow-hidden">
+              <div className="relative w-full h-72">
                 <Image
                   src={url}
                   alt={`Media ${idx}`}
                   fill
-                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
-                  className="object-cover rounded-xl"
-                  priority={idx < 4} // prioritize first few images for better UX
+                  className="object-cover"
+                  sizes="100%"
                 />
               </div>
             ) : (
               <video
                 controls
-                className="w-full h-72 object-cover rounded-xl bg-black"
+                className="w-full h-72 object-cover bg-black"
                 preload="metadata"
               >
                 <source src={url} />
-                Sorry, your browser doesn&apos;t support embedded videos.
+                Sorry, your browser doesn't support embedded videos.
               </video>
             )}
 
-            {/* Show delete icon only if admin */}
             {isAdmin && (
               <button
                 onClick={() => handleDelete(url)}
                 title="Delete media"
-                className="absolute top-2 right-2 bg-red-600 hover:bg-red-700 text-white px-2 py-1 rounded shadow-lg transition"
+                className="absolute top-2 right-2 bg-red-500 hover:bg-red-600 text-white text-sm px-2 py-1 rounded-full shadow-md"
               >
                 ✖
               </button>
@@ -162,7 +151,7 @@ export default function BlogsPage() {
 
       {/* Admin Password Modal */}
       {showPasswordModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-80 flex justify-center items-center z-50">
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
           <motion.div
             initial={{ scale: 0.8, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
@@ -179,7 +168,7 @@ export default function BlogsPage() {
             <div className="flex justify-end mt-4 space-x-2">
               <button
                 onClick={() => setShowPasswordModal(false)}
-                className="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400"
+                className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300"
               >
                 Cancel
               </button>
@@ -196,7 +185,7 @@ export default function BlogsPage() {
 
       {/* Upload Modal */}
       {showUploadModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-80 flex justify-center items-center z-50">
+        <div className="fixed inset-0 bg-black bg-opacity-60 flex justify-center items-center z-50">
           <motion.div
             initial={{ scale: 0.8, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
@@ -204,7 +193,7 @@ export default function BlogsPage() {
           >
             <h2 className="text-2xl font-bold mb-4 text-center">Upload Media</h2>
             <div className="relative border-2 border-dashed border-gray-400 rounded-lg p-4 h-40 flex flex-col justify-center items-center hover:border-blue-600 transition-all cursor-pointer">
-              <span className="text-sm text-gray-600">Drag & drop or click to upload</span>
+              <span className="text-sm text-gray-500">Drag & drop or click to upload</span>
               <input
                 type="file"
                 accept="image/*,video/*"

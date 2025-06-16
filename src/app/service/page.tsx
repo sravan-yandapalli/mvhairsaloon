@@ -54,17 +54,17 @@ const services = [
 
 const Service = () => {
   return (
-    <div className="bg-[#0C1B33] text-white py-16 px-4 sm:px-8">
+    <div className="bg-white text-gray-800 py-16 px-4 sm:px-8">
       <div className="max-w-7xl mx-auto">
-        <h2 className="text-3xl sm:text-4xl select-none font-bold mb-12 text-center">
+        <h2 className="text-4xl font-bold text-center mb-12 text-[#0C1B33]">
           Our Services
         </h2>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
           {services.map((service, index) => (
             <div
               key={index}
-              className="bg-[#1e1e1e] rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-shadow duration-300"
+              className="bg-white rounded-3xl overflow-hidden border border-gray-200 shadow-md hover:shadow-xl transition-shadow duration-300"
             >
               <div className="relative w-full h-64 sm:h-80">
                 <Image
@@ -72,14 +72,16 @@ const Service = () => {
                   alt={service.title}
                   layout="fill"
                   objectFit="cover"
-                  className="rounded-t-2xl"
+                  className="rounded-t-3xl"
                 />
               </div>
               <div className="p-6">
-                <h3 className="text-xl font-semibold mb-2">
+                <h3 className="text-xl font-semibold text-[#004F73] mb-2">
                   {service.title}
                 </h3>
-                <p className="text-gray-300 text-sm">{service.description}</p>
+                <p className="text-gray-600 text-sm leading-relaxed">
+                  {service.description}
+                </p>
               </div>
             </div>
           ))}

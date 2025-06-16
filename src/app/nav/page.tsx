@@ -12,6 +12,10 @@ const Navbar: React.FC = () => {
         setMobileMenuOpen(!isMobileMenuOpen);
     };
 
+    const closeMobileMenu = () => {
+        setMobileMenuOpen(false);
+    };
+
     return (
         <header className="w-full z-50 fixed top-0 backdrop-blur-md bg-gradient-to-r from-[#1a1a1a]/90 to-[#2c2c2c]/90 text-white shadow-lg">
             <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
@@ -83,30 +87,32 @@ const Navbar: React.FC = () => {
             {/* Mobile Menu Dropdown */}
             {isMobileMenuOpen && (
                 <div className="md:hidden px-4 py-2 space-y-2 bg-white text-black">
-                    <Link href="/" className="block text-lg hover:text-[#eacb5b] transition">
+                    <Link href="/" onClick={closeMobileMenu} className="block text-lg hover:text-[#eacb5b] transition">
                         Home
                     </Link>
-                    <Link href="#service" className="block text-lg hover:text-[#eacb5b] transition">
+                    <Link href="#service" onClick={closeMobileMenu} className="block text-lg hover:text-[#eacb5b] transition">
                         Services
                     </Link>
-                    <Link href="#blogs" className="block text-lg hover:text-[#eacb5b] transition">
+                    <Link href="#blogs" onClick={closeMobileMenu} className="block text-lg hover:text-[#eacb5b] transition">
                         Blogs
                     </Link>
-                    <Link href="#reviews" className="block text-lg hover:text-[#eacb5b] transition">
+                    <Link href="#reviews" onClick={closeMobileMenu} className="block text-lg hover:text-[#eacb5b] transition">
                         Reviews
                     </Link>
-                    <Link href="#contact" className="block text-lg hover:text-[#eacb5b] transition">
+                    <Link href="#contact" onClick={closeMobileMenu} className="block text-lg hover:text-[#eacb5b] transition">
                         Contact Us
                     </Link>
                     <Link
                         href="#appointments"
+                        onClick={closeMobileMenu}
                         className="block bg-[#EC5800] text-white px-4 py-2 rounded-lg text-lg font-semibold text-center hover:bg-white hover:text-black transition"
                     >
                         Book Appointments
                     </Link>
                     <Link
                         href="#home-services"
-                        className="bg-[#DAA520] text-white px-4 py-2 rounded-lg text-lg font-bold hover:bg-blue-400 hover:text-black transition"
+                        onClick={closeMobileMenu}
+                        className="block bg-[#DAA520] text-white px-4 py-2 rounded-lg text-lg font-bold hover:bg-blue-400 hover:text-black transition"
                     >
                         Home Services
                     </Link>

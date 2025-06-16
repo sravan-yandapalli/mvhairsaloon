@@ -132,7 +132,7 @@ export default function BlogsPage() {
                 preload="metadata"
               >
                 <source src={url} />
-                Sorry, your browser doesn't support embedded videos.
+                Sorry, your browser doesn&apos;t support embedded videos.
               </video>
             )}
 

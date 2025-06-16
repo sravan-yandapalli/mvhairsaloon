@@ -20,7 +20,11 @@ export default function BlogsPage() {
   }, []);
 
   const handleUploadClick = () => {
-    isAdmin ? setShowUploadModal(true) : setShowPasswordModal(true);
+    if (isAdmin) {
+      setShowUploadModal(true);
+    } else {
+      setShowPasswordModal(true);
+    }
   };
 
   const handlePasswordSubmit = () => {

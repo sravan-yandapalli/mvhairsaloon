@@ -105,14 +105,14 @@ const Navbar: React.FC = () => {
                     <Link
                         href="#appointments"
                         onClick={closeMobileMenu}
-                        className="block bg-[#EC5800] text-white px-4 py-2 rounded-lg text-lg font-semibold text-center hover:bg-white hover:text-black transition"
+                        className="block w-full text-center bg-[#EC5800] text-white px-4 py-2 rounded-lg text-lg font-semibold hover:bg-white hover:text-black transition"
                     >
                         Book Appointments
                     </Link>
                     <Link
                         href="#home-services"
                         onClick={closeMobileMenu}
-                        className="block bg-[#DAA520] text-white px-4 py-2 rounded-lg text-lg font-bold hover:bg-blue-400 hover:text-black transition"
+                        className="block w-full text-center bg-[#DAA520] text-white px-4 py-2 rounded-lg text-lg font-bold hover:bg-blue-400 hover:text-black transition"
                     >
                         Home Services
                     </Link>

@@ -115,16 +115,26 @@ const Footer = () => {
             SUBSCRIBE VIA EMAIL
           </a>
 
-          {/* QR Code Image */}
+          {/* QR Code + Link */}
           <div className="mt-6">
             <h4 className="text-white font-semibold mb-2 text-sm">Scan For Locations :</h4>
-            <Image
-              src="/assets/qr.png"
-              alt="QR Code"
-              width={120}
-              height={120}
-              className="rounded-lg border border-gray-500"
-            />
+            <div className="flex items-center gap-4">
+              <Image
+                src="/assets/qr.png"
+                alt="QR Code"
+                width={120}
+                height={120}
+                className="rounded-lg border border-gray-500"
+              />
+              <a
+                href="https://newmvhairstudio.in/scanner"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-[#aa9144] text-sm underline hover:text-[#c0a84c]"
+              >
+                Visit Scanner Page
+              </a>
+            </div>
           </div>
         </div>
       </div>

@@ -1,3 +1,4 @@
+
 'use client';
 
 import React, { useEffect, useState } from 'react';
@@ -8,6 +9,7 @@ export default function BlogsPage() {
   const [isAdmin, setIsAdmin] = useState(false);
   const [showUploadModal, setShowUploadModal] = useState(false);
   const [showPasswordModal, setShowPasswordModal] = useState(false);
+
   const [adminPassword, setAdminPassword] = useState('');
   const [mediaFiles, setMediaFiles] = useState<File[]>([]);
   const [mediaURLs, setMediaURLs] = useState<string[]>([]);
@@ -100,19 +102,16 @@ export default function BlogsPage() {
   };
 
   return (
-    <div className="p-4 bg-gradient-to-b from-purple-900 to-black min-h-screen text-white">
+    <div className="p-6">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-4xl font-extrabold bg-gradient-to-r from-yellow-400 to-pink-500 bg-clip-text text-transparent">
-          Blogs Gallery
-        </h1>
+        <h1 className="text-3xl font-bold">Blogs Media Gallery</h1>
         <button
           onClick={handleUploadClick}
-          className="text-white bg-gradient-to-r from-blue-600 to-indigo-700 hover:from-blue-700 hover:to-indigo-800 px-4 py-2 rounded shadow-lg transition transform hover:scale-105"
+          className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
         >
-          ⬆ Upload
+          Upload Media
         </button>
       </div>
-
       <motion.div
         className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"
         initial={{ opacity: 0 }}
@@ -126,7 +125,7 @@ export default function BlogsPage() {
           >
             {/* Container for next/image must be relative with fixed height */}
             {/\.(jpe?g|png|gif|webp)$/i.test(url) ? (
-              <div className="relative w-full h-100 rounded-xl overflow-hidden">
+              <div className="relative w-full h-72 rounded-xl overflow-hidden">
                 <Image
                   src={url}
                   alt={`Media ${idx}`}
@@ -143,7 +142,7 @@ export default function BlogsPage() {
                 preload="metadata"
               >
                 <source src={url} />
-                Sorry, your browser doesn&#39;t support embedded videos.
+                Sorry, your browser doesn't support embedded videos.
               </video>
             )}
 

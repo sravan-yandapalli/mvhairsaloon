@@ -71,10 +71,6 @@ export default function Home() {
       </section>
 
 
-      <section id="reviews">
-        <Feedback />
-      </section>
-
 
       <section id="appointments">
         <BookAppointment />
@@ -89,9 +85,6 @@ export default function Home() {
       </section>
 
 
-      <section id="appointments">
-        <BookAppointment />
-      </section>
 
       <section id="contact">
         <Footer />

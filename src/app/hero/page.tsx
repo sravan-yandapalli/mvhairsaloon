@@ -9,7 +9,6 @@ const backgroundImages = [
   "/assets/hero/11.jpg",
   "/assets/hero/12.jpg",
   "/assets/hero/3.jpeg",
-  
 ];
 
 const HeroSection = () => {
@@ -25,11 +24,11 @@ const HeroSection = () => {
     return () => clearInterval(interval);
   }, []);
 
-return (
-  <section className="w-full min-h-screen flex flex-col md:flex-row items-center justify-between bg-[#0C1B33] text-white px-6 sm:px-10 md:px-16 lg:px-24 py-10">
-    
-    {/* Left - Text Content */}
-    <div className="w-full md:w-1/2 space-y-6">
+  return (
+    <section className="w-full min-h-screen flex flex-col md:flex-row items-center justify-between bg-[#0C1B33] text-white px-6 sm:px-10 md:px-16 lg:px-24 py-10 mt-[60px] mb-[60px]">
+      
+      {/* Left - Text Content */}
+      <div className="w-full md:w-1/2 space-y-6">
         <div className="w-36 h-16 relative mb-4">
           <Image
             src="/assets/navbar/Asset 1.svg"

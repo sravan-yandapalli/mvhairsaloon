@@ -7,15 +7,15 @@ import { S3Client, PutObjectCommand, DeleteObjectCommand, ListObjectsV2Command }
 
 export const config = { api: { bodyParser: false } };
 
-// Use non-public env names for secrets
+// Server-side env vars (DO NOT prefix with NEXT_PUBLIC_)
 const REGION = process.env.AWS_REGION!;
 const ACCESS_KEY = process.env.AWS_ACCESS_KEY_ID!;
 const SECRET = process.env.AWS_SECRET_ACCESS_KEY!;
 const BUCKET = process.env.AWS_S3_BUCKET_NAME!;
-const ADMIN_SECRET = process.env.ADMIN_SECRET!; // not NEXT_PUBLIC
+const ADMIN_SECRET = process.env.NEXT_PUBLIC_ADMIN_SECRET || process.env.ADMIN_SECRET || ''; // quick compatibility
 
-if (!REGION || !ACCESS_KEY || !SECRET || !BUCKET || !ADMIN_SECRET) {
-  console.warn('Missing required env vars for S3 or ADMIN_SECRET');
+if (!REGION || !ACCESS_KEY || !SECRET || !BUCKET) {
+  console.warn('Missing required AWS env vars');
 }
 
 const s3 = new S3Client({
@@ -25,16 +25,12 @@ const s3 = new S3Client({
 
 async function listObjects() {
   const list = await s3.send(new ListObjectsV2Command({ Bucket: BUCKET, Prefix: 'uploads/' }));
-  const urls = (list.Contents || []).map(obj => `https://${BUCKET}.s3.${REGION}.amazonaws.com/${obj.Key}`);
+  const urls = (list.Contents || []).map((obj) => `https://${BUCKET}.s3.${REGION}.amazonaws.com/${obj.Key}`);
   return urls;
 }
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  // Allow GET (list) without admin if you want public listing. If you want restricted listing,
-  // uncomment the auth check below for GET too.
-  // const authHeader = req.headers.authorization;
-  // if (req.method !== 'GET' && authHeader !== `Bearer ${ADMIN_SECRET}`) { ... }
-
+  // GET: list media (public listing)
   if (req.method === 'GET') {
     try {
       const urls = await listObjects();
@@ -45,14 +41,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
   }
 
-  // require admin for POST and DELETE
+  // For POST/DELETE require admin token
   const authHeader = req.headers.authorization;
-  if (authHeader !== `Bearer ${ADMIN_SECRET}`) {
+  if (!authHeader || authHeader !== `Bearer ${ADMIN_SECRET}`) {
     return res.status(403).json({ error: 'Unauthorized' });
   }
 
   if (req.method === 'POST') {
     const form = new IncomingForm({ multiples: true });
+
     try {
       const data = await new Promise<{ files: Files }>((resolve, reject) => {
         form.parse(req, (err, fields, files) => {
@@ -61,7 +58,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         });
       });
 
-      const uploadedFiles = Array.isArray(data.files.files) ? data.files.files : [data.files.files];
+      // support input name 'files'
+      const uploadedFiles = Array.isArray((data.files as any).files) ? (data.files as any).files : [(data.files as any).files];
       const validFiles = uploadedFiles.filter((file): file is File => !!file);
 
       const urls = await Promise.all(validFiles.map(async (file) => {
@@ -74,7 +72,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           Key: key,
           Body: fileContent,
           ContentType: file.mimetype || 'application/octet-stream',
-          ACL: 'public-read', // if you want direct public URLs
+          ACL: 'public-read', // public access so clients can view directly
         }));
 
         try { fs.unlinkSync(file.filepath); } catch (e) { /* ignore */ }
@@ -82,8 +80,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         return `https://${BUCKET}.s3.${REGION}.amazonaws.com/${key}`;
       }));
 
-      // Return the public urls so client can append without refetch, but also
-      // client should re-fetch /api/media to be canonical.
+      // Return uploaded urls (client still re-fetches canonical listing)
       return res.status(200).json({ urls });
     } catch (error) {
       console.error('Upload error:', error);
@@ -92,12 +89,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   if (req.method === 'DELETE') {
-    // Accept either key param or full URL and extract key robustly.
     let key = req.query.key as string | undefined;
     const url = req.query.url as string | undefined;
 
     if (!key && url) {
-      // Try to extract the path after `.amazonaws.com/`
       const split = url.split('.amazonaws.com/');
       key = split[1] || undefined;
     }

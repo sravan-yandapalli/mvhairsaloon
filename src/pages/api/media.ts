@@ -14,10 +14,10 @@ import {
 export const config = { api: { bodyParser: false } };
 
 // env vars
-const REGION = process.env.AWS_REGION ?? '';
-const ACCESS_KEY = process.env.AWS_ACCESS_KEY_ID ?? '';
-const SECRET = process.env.AWS_SECRET_ACCESS_KEY ?? '';
-const BUCKET = process.env.AWS_S3_BUCKET_NAME ?? '';
+const REGION = process.env.NEXT_PUBLIC_AWS_REGION ?? '';
+const ACCESS_KEY = process.env.NEXT_PUBLIC_AWS_ACCESS_KEY_ID ?? '';
+const SECRET = process.env.NEXT_PUBLIC_AWS_SECRET_ACCESS_KEY ?? '';
+const BUCKET = process.env.S3_BUCKET_NAME ?? '';
 const ADMIN_SECRET = process.env.ADMIN_SECRET ?? process.env.NEXT_PUBLIC_ADMIN_SECRET ?? '';
 
 const s3 = new S3Client({

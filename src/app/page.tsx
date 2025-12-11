@@ -91,7 +91,7 @@ export default function Home() {
       </section>
 
       <a
-        href="tel:+919876543210"
+        href="tel:+919542658504"
         className="fixed bottom-24 right-4 z-50"
       >
         <Image
@@ -105,7 +105,7 @@ export default function Home() {
 
 
       <a
-        href="https://wa.me/919876543210?text=Hi%2C%20I%20am%20interested%20in%20your%20non-surgical%20hair%20replacement%20services"
+        href="https://wa.me/919542658504?text=Hi%2C%20I%20am%20interested%20in%20your%20non-surgical%20hair%20replacement%20services"
         target="_blank"
         rel="noopener noreferrer"
         className="fixed bottom-4 right-4 z-50"

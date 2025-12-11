@@ -7,7 +7,7 @@ import { S3Client, PutObjectCommand, DeleteObjectCommand, ListObjectsV2Command }
 
 export const config = { api: { bodyParser: false } };
 
-// Use server-only env vars (do not expose these)
+// server-only env vars (do not use NEXT_PUBLIC_ for secrets)
 const REGION = process.env.AWS_REGION ?? '';
 const ACCESS_KEY = process.env.AWS_ACCESS_KEY_ID ?? '';
 const SECRET = process.env.AWS_SECRET_ACCESS_KEY ?? '';
@@ -23,10 +23,9 @@ const s3 = new S3Client({
   credentials: { accessKeyId: ACCESS_KEY, secretAccessKey: SECRET },
 });
 
-// List objects under prefix uploads/
 async function listObjects(): Promise<string[]> {
-  const list = await s3.send(new ListObjectsV2Command({ Bucket: BUCKET, Prefix: 'uploads/' }));
-  const urls = (list.Contents || []).map((obj) => `https://${BUCKET}.s3.${REGION}.amazonaws.com/${obj.Key}`);
+  const result = await s3.send(new ListObjectsV2Command({ Bucket: BUCKET, Prefix: 'uploads/' }));
+  const urls = (result.Contents || []).map((obj) => `https://${BUCKET}.s3.${REGION}.amazonaws.com/${obj.Key}`);
   return urls;
 }
 
@@ -41,7 +40,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
   }
 
-  // Require admin for POST and DELETE
+  // for POST and DELETE require admin token
   const authHeader = req.headers.authorization;
   if (!authHeader || authHeader !== `Bearer ${ADMIN_SECRET}`) {
     return res.status(403).json({ error: 'Unauthorized' });
@@ -58,36 +57,36 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         });
       });
 
-      // The client uses input name 'files' so parsedFiles.files might exist
-      const filesArrayCandidate = (files as any).files ?? files;
-      // Normalize to array of FormidableFile
-      let uploadedFiles: FormidableFile[] = [];
+      // Attempt to get files from the 'files' field first (client uses files),
+      // otherwise flatten all fields found in parsed files.
+      let candidate: FormidableFile | FormidableFile[] | undefined = undefined;
+      const filesRecord = files as Files;
 
-      if (Array.isArray(filesArrayCandidate)) {
-        uploadedFiles = filesArrayCandidate as FormidableFile[];
-      } else if (typeof filesArrayCandidate === 'object' && filesArrayCandidate !== null && 'filepath' in filesArrayCandidate) {
-        uploadedFiles = [filesArrayCandidate as FormidableFile];
+      if (Object.prototype.hasOwnProperty.call(filesRecord, 'files')) {
+        candidate = filesRecord['files'];
       } else {
-        // handle arbitrary form field names
+        // flatten any file fields
         const flattened: FormidableFile[] = [];
-        for (const key of Object.keys(files)) {
-          const val = (files as any)[key];
-          if (Array.isArray(val)) flattened.push(...(val as FormidableFile[]));
-          else if (val && typeof val === 'object' && 'filepath' in val) flattened.push(val as FormidableFile);
+        for (const key of Object.keys(filesRecord)) {
+          const value = filesRecord[key];
+          if (Array.isArray(value)) flattened.push(...(value as FormidableFile[]));
+          else if (value && typeof value === 'object' && 'filepath' in value) flattened.push(value as FormidableFile);
         }
-        uploadedFiles = flattened;
+        candidate = flattened;
       }
 
-      if (uploadedFiles.length === 0) {
-        return res.status(400).json({ error: 'No files uploaded' });
-      }
+      let uploadedFiles: FormidableFile[] = [];
+      if (Array.isArray(candidate)) uploadedFiles = candidate;
+      else if (candidate && typeof candidate === 'object' && 'filepath' in candidate) uploadedFiles = [candidate];
+
+      if (uploadedFiles.length === 0) return res.status(400).json({ error: 'No files uploaded' });
 
       const urls: string[] = [];
 
       for (const file of uploadedFiles) {
         const fileContent = fs.readFileSync(file.filepath);
         const extension = path.extname(file.originalFilename || '') || '';
-        const key = `uploads/${Date.now()}-${Math.random().toString(36).substring(2)}${extension}`;
+        const key = `uploads/${Date.now()}-${Math.random().toString(36).slice(2)}${extension}`;
 
         await s3.send(new PutObjectCommand({
           Bucket: BUCKET,
@@ -97,13 +96,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           ACL: 'public-read',
         }));
 
-        // remove temp file
-        try { fs.unlinkSync(file.filepath); } catch (unlinkErr) { console.warn('Failed to unlink temp file', unlinkErr); }
+        try { fs.unlinkSync(file.filepath); } catch (_) { /* ignore */ }
 
         urls.push(`https://${BUCKET}.s3.${REGION}.amazonaws.com/${key}`);
       }
 
-      // return the newly uploaded urls (client also re-fetches canonical list)
       return res.status(200).json({ urls });
     } catch (err) {
       console.error('Upload error:', err);
@@ -121,9 +118,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       key = parts[1];
     }
 
-    if (!key) {
-      return res.status(400).json({ error: 'Missing key or url' });
-    }
+    if (!key) return res.status(400).json({ error: 'Missing key or url' });
 
     try {
       await s3.send(new DeleteObjectCommand({ Bucket: BUCKET, Key: key }));

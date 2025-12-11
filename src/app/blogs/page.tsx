@@ -15,7 +15,6 @@ export default function BlogsPage() {
 
   useEffect(() => {
     const token = localStorage.getItem('adminToken');
-    // Quick dev: if you used the admin token before, keep admin logged in
     if (token === process.env.NEXT_PUBLIC_ADMIN_SECRET) {
       setIsAdmin(true);
     }
@@ -49,7 +48,6 @@ export default function BlogsPage() {
   };
 
   const handlePasswordSubmit = () => {
-    // Quick dev flow: compare to NEXT_PUBLIC_ADMIN_SECRET
     if (adminPassword === process.env.NEXT_PUBLIC_ADMIN_SECRET) {
       localStorage.setItem('adminToken', adminPassword);
       setIsAdmin(true);
@@ -84,7 +82,6 @@ export default function BlogsPage() {
       });
 
       if (res.ok) {
-        // after upload, refresh canonical list
         await fetchMedia();
         setMediaFiles([]);
         setShowUploadModal(false);
@@ -157,7 +154,7 @@ export default function BlogsPage() {
                     fill
                     className="object-cover"
                     sizes="100%"
-                    unoptimized // remove if you configured next.config.js for your S3 domain
+                    unoptimized
                   />
                 </div>
               ) : (

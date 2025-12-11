@@ -19,6 +19,7 @@ export default function BlogsPage() {
       setIsAdmin(true);
     }
     fetchMedia();
+    // intentionally no deps — runs once on mount
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -40,11 +41,8 @@ export default function BlogsPage() {
   };
 
   const handleUploadClick = () => {
-    if (isAdmin) {
-      setShowUploadModal(true);
-    } else {
-      setShowPasswordModal(true);
-    }
+    if (isAdmin) setShowUploadModal(true);
+    else setShowPasswordModal(true);
   };
 
   const handlePasswordSubmit = () => {
@@ -60,10 +58,7 @@ export default function BlogsPage() {
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files) {
-      const files = Array.from(e.target.files);
-      setMediaFiles(files);
-    }
+    if (e.target.files) setMediaFiles(Array.from(e.target.files));
   };
 
   const handleUpload = async () => {

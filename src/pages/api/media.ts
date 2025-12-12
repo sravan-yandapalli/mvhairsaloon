@@ -13,12 +13,47 @@ import {
 
 export const config = { api: { bodyParser: false } };
 
-// env vars
-const REGION = process.env.NEXT_PUBLIC_AWS_REGION ?? '';
-const ACCESS_KEY = process.env.NEXT_PUBLIC_AWS_ACCESS_KEY_ID ?? '';
-const SECRET = process.env.NEXT_PUBLIC_AWS_SECRET_ACCESS_KEY ?? '';
-const BUCKET = process.env.S3_BUCKET_NAME ?? '';
-const ADMIN_SECRET = process.env.ADMIN_SECRET ?? process.env.NEXT_PUBLIC_ADMIN_SECRET ?? '';
+/*
+  ---------------------------------------------------------------------
+  SERVER ENV PRIORITY (Amplify backend)
+  ---------------------------------------------------------------------
+  Use server-only variables FIRST:
+    SERVER_AWS_REGION
+    SERVER_AWS_ACCESS_KEY_ID
+    SERVER_AWS_SECRET_ACCESS_KEY
+
+  If server env missing, fallback to NEXT_PUBLIC (build-time)
+  ---------------------------------------------------------------------
+*/
+
+const REGION =
+  process.env.SERVER_AWS_REGION ||
+  process.env.NEXT_PUBLIC_AWS_REGION ||
+  '';
+
+const ACCESS_KEY =
+  process.env.SERVER_AWS_ACCESS_KEY_ID ||
+  process.env.NEXT_PUBLIC_AWS_ACCESS_KEY_ID ||
+  '';
+
+const SECRET =
+  process.env.SERVER_AWS_SECRET_ACCESS_KEY ||
+  process.env.NEXT_PUBLIC_AWS_SECRET_ACCESS_KEY ||
+  '';
+
+const BUCKET =
+  process.env.S3_BUCKET_NAME ||
+  process.env.NEXT_PUBLIC_AWS_S3_BUCKET_NAME ||
+  '';
+
+const ADMIN_SECRET =
+  process.env.ADMIN_SECRET ||
+  process.env.NEXT_PUBLIC_ADMIN_SECRET ||
+  '';
+
+/*
+  ---------------------------------------------------------------------
+*/
 
 const s3 = new S3Client({
   region: REGION,
@@ -38,28 +73,40 @@ function extractErrorMessage(err: unknown): string {
 
 // list existing files
 async function listObjects(): Promise<string[]> {
+  if (!BUCKET) throw new Error("❌ BUCKET name missing (S3_BUCKET_NAME)");
+  
   const result = await s3.send(
-    new ListObjectsV2Command({ Bucket: BUCKET, Prefix: 'uploads/' }),
+    new ListObjectsV2Command({ Bucket: BUCKET, Prefix: 'uploads/' })
   );
-  return (result.Contents || []).map(
-    (obj) => `https://${BUCKET}.s3.${REGION}.amazonaws.com/${obj.Key}`,
+
+  return (result.Contents || []).map((obj) =>
+    `https://${BUCKET}.s3.${REGION}.amazonaws.com/${obj.Key}`
   );
 }
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+  console.log("ENV CHECK", {
+    REGION,
+    ACCESS_KEY: ACCESS_KEY ? "OK" : "MISSING",
+    SECRET: SECRET ? "OK" : "MISSING",
+    BUCKET,
+    ADMIN_SECRET: ADMIN_SECRET ? "OK" : "MISSING",
+    method: req.method,
+  });
+
   // GET — list files
   if (req.method === 'GET') {
     try {
       const urls = await listObjects();
       return res.status(200).json({ urls });
     } catch (err) {
-      return res
-        .status(500)
-        .json({ error: 'List failed', details: extractErrorMessage(err) });
+      const msg = extractErrorMessage(err);
+      console.error("❌ GET ERROR:", msg);
+      return res.status(500).json({ error: 'List failed', details: msg });
     }
   }
 
-  // Authorization
+  // Authorization for POST + DELETE
   const authHeader = req.headers.authorization;
   if (!authHeader || authHeader !== `Bearer ${ADMIN_SECRET}`) {
     return res.status(403).json({ error: 'Unauthorized' });
@@ -67,15 +114,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   // POST — upload file(s)
   if (req.method === 'POST') {
-    // ENV CHECK
-    console.log('ENV CHECK', {
-      AWS_REGION: REGION ? 'OK' : 'MISSING',
-      AWS_ACCESS_KEY_ID: ACCESS_KEY ? 'OK' : 'MISSING',
-      AWS_SECRET_ACCESS_KEY: SECRET ? 'OK' : 'MISSING',
-      AWS_S3_BUCKET_NAME: BUCKET || 'missing',
-      ADMIN_SECRET: ADMIN_SECRET ? 'OK' : 'MISSING',
-    });
-
     const form = formidable({ multiples: true });
 
     try {
@@ -86,33 +124,26 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         });
       });
 
-      // Normalize files
+      // Normalize file list
       let uploadList: FormidableFile[] = [];
-
-      if ("files" in files) {
-        const f = files["files"];
-        if (f !== undefined) {
-          uploadList = Array.isArray(f) ? f : [f];
-        }
+      if ('files' in files) {
+        const f = files['files'];
+        if (f) uploadList = Array.isArray(f) ? f : [f];
       } else {
         for (const key of Object.keys(files)) {
           const value = files[key];
-          if (Array.isArray(value)) uploadList.push(...value);
-          else if (value !== undefined) uploadList.push(value);
+          if (!value) continue;
+          uploadList.push(...(Array.isArray(value) ? value : [value]));
         }
       }
 
-      if (uploadList.length === 0) {
+      if (uploadList.length === 0)
         return res.status(400).json({ error: 'No files uploaded' });
-      }
 
       const urls: string[] = [];
 
       for (const file of uploadList) {
-        const filePath =
-          (file as { filepath?: string }).filepath ??
-          (file as { path?: string }).path;
-
+        const filePath = (file as any).filepath || (file as any).path;
         if (!filePath || !fs.existsSync(filePath)) {
           return res.status(500).json({ error: 'Temp file missing' });
         }
@@ -128,33 +159,34 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
               Key: key,
               Body: fileStream,
               ContentType: file.mimetype || 'application/octet-stream',
-            }),
+            })
           );
         } catch (err) {
           const msg = extractErrorMessage(err);
-          console.error('S3 upload error:', msg);
+          console.error("❌ S3 upload error:", msg);
           return res.status(500).json({ error: 'S3 upload failed', details: msg });
         }
 
-        fs.unlinkSync(filePath); // remove temp file
+        fs.unlinkSync(filePath);
         urls.push(`https://${BUCKET}.s3.${REGION}.amazonaws.com/${key}`);
       }
 
       return res.status(200).json({ urls });
+
     } catch (err) {
-      return res
-        .status(500)
-        .json({ error: 'Upload failed', details: extractErrorMessage(err) });
+      const msg = extractErrorMessage(err);
+      return res.status(500).json({ error: 'Upload failed', details: msg });
     }
   }
 
-  // DELETE — remove file
+  // DELETE
   if (req.method === 'DELETE') {
-    const key = typeof req.query.key === 'string'
-      ? req.query.key
-      : typeof req.query.url === 'string'
-      ? req.query.url.split('.amazonaws.com/')[1]
-      : undefined;
+    const key =
+      typeof req.query.key === 'string'
+        ? req.query.key
+        : typeof req.query.url === 'string'
+        ? req.query.url.split('.amazonaws.com/')[1]
+        : undefined;
 
     if (!key) return res.status(400).json({ error: 'Missing key or url' });
 
@@ -162,13 +194,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       await s3.send(new DeleteObjectCommand({ Bucket: BUCKET, Key: key }));
       return res.status(200).json({ message: 'Deleted successfully' });
     } catch (err) {
-      return res
-        .status(500)
-        .json({ error: 'Delete failed', details: extractErrorMessage(err) });
+      const msg = extractErrorMessage(err);
+      return res.status(500).json({ error: 'Delete failed', details: msg });
     }
   }
 
-  // Method not allowed
-  res.setHeader('Allow', ['GET', 'POST', 'DELETE']);
-  return res.status(405).end(`Method ${req.method} Not Allowed`);
+  return res.status(405).json({ message: `Method ${req.method} Not Allowed` });
 }
